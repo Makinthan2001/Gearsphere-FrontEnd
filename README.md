@@ -303,7 +303,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Support
 
 For support and questions:
-- **Email**: support@gearsphere.com
+- **Email**: mahinthan2001a@gmail.com
 - **Issues**: Create an issue on GitHub
 - **Documentation**: Check the `/Documentation` folder
 
