@@ -695,7 +695,7 @@ function HomePage() {
                     <h2 className="about-heading-custom">Our Story</h2>
                     <p
                       className="about-text-custom"
-                      style={{ textAlign: "justify" }}
+                      style={{ textAlign: "justify", fontSize: "1rem" }}
                     >
                       <strong>GearSphere</strong> was founded in 2020 by a group
                       of passionate PC enthusiasts to make custom PC building
@@ -705,7 +705,7 @@ function HomePage() {
                     </p>
                     <p
                       className="about-text-custom"
-                      style={{ textAlign: "justify" }}
+                      style={{ textAlign: "justify", fontSize: "1rem" }}
                     >
                       Our mission is to make custom PC building easy,
                       affordable, and accessible whether you're a beginner or an
@@ -730,24 +730,24 @@ function HomePage() {
                   >
                     <div
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        width: "80%",
+                        height: "80%",
                         minHeight: 340,
                         borderRadius: "2rem",
                         overflow: "hidden",
                       }}
                     >
-                      <img
-                        src={aboutus}
-                        alt="GearSphere Team"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "2rem",
-                        }}
-                      />
-                    </div>
+                    <img
+                      src={aboutus}
+                      alt="GearSphere Team"
+                      style={{
+                        width: "80%",
+                        height: "80%",
+                        objectFit: "cover",
+                        borderRadius: "2rem",
+                      }}
+                    />
+                  </div>
                   </Col>
                 </Row>
 
@@ -804,13 +804,13 @@ function HomePage() {
                 <Row className="mb-5">
                   <Col md={6} className="mb-4 mb-md-0">
                     <h2>Expert PC Building Services</h2>
-                    <p style={{ textAlign: "justify" }}>
+                    <p style={{ textAlign: "justify", fontSize: "1rem" }}>
                       At GearSphere, we offer comprehensive PC building services
                       tailored to your specific needs. Whether you're a gamer,
                       content creator, or professional, our expert builders will
                       craft the perfect system for you.
                     </p>
-                    <p style={{ textAlign: "justify" }}>
+                    <p style={{ textAlign: "justify", fontSize: "1rem" }}>
                       We handle everything from component selection to assembly,
                       testing, and delivery, ensuring you receive a
                       high-performance, reliable system.
@@ -824,11 +824,22 @@ function HomePage() {
                     </Button>
                   </Col>
                   <Col md={6}>
+                  <div
+                      style={{
+                        width: "80%",
+                        height: "80%",
+                        minHeight: 340,
+                        borderRadius: "2rem",
+                        overflow: "hidden",
+                        margin: "0 auto"
+                      }}
+                    >
                     <img
                       src={serviceimg}
                       alt="PC Building Service"
                       className="img-fluid rounded"
                     />
+                    </div>
                   </Col>
                 </Row>
 
@@ -852,7 +863,7 @@ function HomePage() {
                           </div>
                           <Card.Title>Custom PC Building</Card.Title>
                           <br />
-                          <Card.Text style={{ textAlign: "justify" }}>
+                          <Card.Text style={{ textAlign: "justify", fontSize: "1rem" }}>
                             Personalized systems built to your specifications
                             with premium components and expert assembly.
                           </Card.Text>
@@ -875,7 +886,7 @@ function HomePage() {
                           <Card.Title>
                               Budget-Based PC Build Recommendation
                             </Card.Title>
-                            <Card.Text style={{ textAlign: "justify" }}>
+                            <Card.Text style={{ textAlign: "justify", fontSize: "1rem" }}>
                               Get personalized PC build recommendations based on
                               your budget and needs, ensuring the best value for
                               your money.
@@ -903,7 +914,7 @@ function HomePage() {
                               Assign Technician for PC Build
                             </Card.Title>
                             <br />
-                            <Card.Text style={{ textAlign: "justify" }}>
+                            <Card.Text style={{ textAlign: "justify", fontSize: "1rem" }}>
                               Easily assign a verified technician to build your
                               custom PC, ensuring professional assembly and
                               support.
@@ -926,7 +937,7 @@ function HomePage() {
                             </div>
                             <Card.Title>Buy PC Parts</Card.Title>
                             <br />
-                            <Card.Text style={{ textAlign: "justify" }}>
+                            <Card.Text style={{ textAlign: "justify", fontSize: "1rem" }}>
                               Purchase high-quality PC parts and components
                               directly from trusted sellers through our
                               marketplace.
@@ -957,7 +968,7 @@ function HomePage() {
                             <div className="process-number">1</div>
                             <div className="process-content">
                               <h5>Consultation</h5>
-                              <p className="text-muted mb-0">
+                              <p className="text-muted mb-0" style={{ fontSize: "1rem" }}>
                                 Discuss your needs and budget
                               </p>
                              </div>
@@ -966,7 +977,7 @@ function HomePage() {
                             <div className="process-number">2</div>
                             <div className="process-content">
                               <h5>Component Selection</h5>
-                              <p className="text-muted mb-0">
+                              <p className="text-muted mb-0" style={{ fontSize: "1rem" }}>
                                 Choose the perfect parts
                               </p>
                             </div>
@@ -975,7 +986,7 @@ function HomePage() {
                             <div className="process-number">3</div>
                             <div className="process-content">
                               <h5>Assembly</h5>
-                              <p className="text-muted mb-0">
+                              <p className="text-muted mb-0" style={{ fontSize: "1rem" }}>
                                 Expert building and cable management
                               </p>
                             </div>
@@ -984,7 +995,7 @@ function HomePage() {
                             <div className="process-number">4</div>
                             <div className="process-content">
                               <h5>Testing</h5>
-                              <p className="text-muted mb-0">
+                              <p className="text-muted mb-0" style={{ fontSize: "1rem" }}>
                                 Rigorous quality assurance
                               </p>
                             </div>
@@ -993,7 +1004,7 @@ function HomePage() {
                             <div className="process-number">5</div>
                             <div className="process-content">
                               <h5>Delivery</h5>
-                              <p className="text-muted mb-0">
+                              <p className="text-muted mb-0" style={{ fontSize: "1rem" }}>
                                 Safe shipping and setup assistance
                               </p>
                             </div>
@@ -1002,59 +1013,6 @@ function HomePage() {
                         </Card>
                         </Col>
                     </Row>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col md={12}>
-                    <h2 className="text-center mb-4">
-                      Frequently Asked Questions
-                    </h2>
-                    <Accordion>
-                      <Accordion.Item eventKey="0">
-                        <Accordion.Header>
-                          How long does it take to build a custom PC?
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          Typically, our build process takes 5-7 business days
-                          from order confirmation to shipping. This includes
-                          component procurement, assembly, extensive testing,
-                          and quality control.
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <Accordion.Item eventKey="1">
-                        <Accordion.Header>
-                          Do you offer warranties on custom builds?
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          Yes, all our custom builds come with a 2-year warranty
-                          covering assembly and labor. Individual components are
-                          covered by their respective manufacturer warranties,
-                          which we help you manage if needed.
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <Accordion.Item eventKey="2">
-                        <Accordion.Header>
-                          Can I upgrade my PC in the future?
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          We design our builds with future upgradability in
-                          mind. We can also provide upgrade services when you're
-                          ready to enhance your system.
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <Accordion.Item eventKey="3">
-                        <Accordion.Header>
-                          What if I have issues with my PC after delivery?
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          We provide lifetime technical support for all our
-                          builds. If you encounter any issues, our support team
-                          is just a call or email away to help troubleshoot and
-                          resolve the problem.
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </Accordion>
                   </Col>
                 </Row>
               </Container>
