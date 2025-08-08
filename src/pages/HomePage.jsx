@@ -1136,8 +1136,8 @@ function HomePage() {
                       paddingBottom: 8,
                     }}
                   >
-                    {[0, 1, 2].map((rowIdx) => {
-                      const itemsPerRow = 6;
+                    {[0, 1].map((rowIdx) => {
+                      const itemsPerRow = 50;
                       const rowParts = filteredParts.slice(
                         rowIdx * itemsPerRow,
                         (rowIdx + 1) * itemsPerRow
@@ -1157,14 +1157,17 @@ function HomePage() {
                                 key={idx}
                                 style={{ flex: "0 0 220px", maxWidth: 220 }}
                               >
-                                <Card className="h-100 shadow-sm text-center">
+                                <Card className="shadow-sm text-center">
                                   <Card.Body
                                     className="d-flex flex-column justify-content-between"
                                     style={{ paddingBottom: 0 }}
                                   >
                                     <div
                                       style={{
-                                        minHeight: 120,
+                                        minHeight: 180,
+                                        maxHeight: 180,
+                                        overflowY: "hidden",
+                                        overflowX: "hidden",
                                         display: "flex",
                                         flexDirection: "column",
                                         justifyContent: "flex-start",
@@ -1190,8 +1193,8 @@ function HomePage() {
                                           )
                                         )}
                                       </div>
-                                      <Card.Title>{part.name}</Card.Title>
-                                      <Card.Text className="text-muted">
+                                      <Card.Title style={{ fontSize: '1rem', fontWeight: 500, marginBottom: 2 }}>{part.name}</Card.Title>
+                                      <Card.Text className="text-muted" style={{ fontSize: '0.85rem', marginBottom: 0 }}>
                                         {part.category}
                                       </Card.Text>
                                     </div>
