@@ -751,39 +751,7 @@ function HomePage() {
                   </Col>
                 </Row>
 
-                <Row className="mb-5">
-                  <Col md={12}>
-                    <h2 className="text-center mb-4">Our Values</h2>
-                    <Row>
-                      <Col md={4} className="mb-4">
-                        <div className="our-values-card text-center p-4 h-100 border rounded shadow-sm">
-                          <h4>Quality</h4>
-                          <p style={{ textAlign: "justify" }}>
-                            We never compromise on component quality and build
-                            standards.
-                          </p>
-                        </div>
-                      </Col>
-                      <Col md={4} className="mb-4">
-                        <div className="our-values-card text-center p-4 h-100 border rounded shadow-sm">
-                          <h4>Transparency</h4>
-                          <p style={{ textAlign: "justify" }}>
-                            Clear pricing, honest advice, and no hidden fees.
-                          </p>
-                        </div>
-                      </Col>
-                      <Col md={4} className="mb-4">
-                        <div className="our-values-card text-center p-4 h-100 border rounded shadow-sm">
-                          <h4>Support</h4>
-                          <p style={{ textAlign: "justify" }}>
-                            Lifetime technical support for all our custom
-                            builds.
-                          </p>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
+                
               </Container>
             </section>
 
@@ -1039,6 +1007,7 @@ function HomePage() {
                         aria-label="Search PC parts"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{ boxShadow: 'none', outline: 'none' }}
                       />
                       <Button variant="outline-secondary">
                         <Search />
@@ -1047,7 +1016,7 @@ function HomePage() {
                   </Col>
                   <Col md={6} className="d-flex justify-content-md-end">
                     <Form.Select
-                      style={{ maxWidth: "220px" }}
+                      style={{ maxWidth: "220px", boxShadow: 'none', outline: 'none' }}
                       value={partType}
                       onChange={(e) => setPartType(e.target.value)}
                     >
