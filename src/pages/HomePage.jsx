@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import {
   Container,
   Row,
@@ -834,30 +835,44 @@ function HomePage() {
                 {/* Service Offerings Section */}
                 <Row className="mb-5">
                   <Col md={12}>
-                    <h2 className="text-center mb-4">Our Service Offerings</h2>
-                    <Row>
-                      <Col md={3} className="mb-4">
-                        <Card className="service-card modern-border h-100">
-                          <Card.Body className="text-center">
-                            <div className="service-icon mb-3">
-                              <Cpu size={40} style={{ color: "#4361ee" }} />
-                            </div>
-                            <Card.Title>Custom PC Building</Card.Title>
-                            <br />
-                            <Card.Text style={{ textAlign: "justify" }}>
-                              Personalized systems built to your specifications
-                              with premium components and expert assembly.
-                            </Card.Text>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                      <Col md={3} className="mb-4">
-                        <Card className="service-card modern-border h-100">
-                          <Card.Body className="text-center">
-                            <div className="service-icon mb-3">
-                              <Tools size={40} style={{ color: "#00b894" }} />
-                            </div>
-                            <Card.Title>
+                  <h2 className="text-center mb-4">Our Service Offerings</h2>
+                  <Row>
+                    <Col md={3} className="mb-4">
+                      <Card className="service-card modern-border h-100" 
+                      style={{
+                        borderRadius: "1.5rem",
+                        boxShadow: "0 8px 32px rgba(33, 150, 243, 0.15), 0 1.5px 6px rgba(0,0,0,0.08)",
+                        border: "none",
+                        transition: "transform 0.3s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s cubic-bezier(.25,.8,.25,1)",
+                        zIndex: "2",
+                      }}>
+                        <Card.Body className="text-center">
+                          <div className="service-icon mb-3">
+                            <Cpu size={40} style={{ color: "#4361ee" }} />
+                          </div>
+                          <Card.Title>Custom PC Building</Card.Title>
+                          <br />
+                          <Card.Text style={{ textAlign: "justify" }}>
+                            Personalized systems built to your specifications
+                            with premium components and expert assembly.
+                          </Card.Text>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                    <Col md={3} className="mb-4">
+                      <Card className="service-card modern-border h-100" 
+                      style={{
+                        borderRadius: "1.5rem",
+                        boxShadow: "0 8px 32px rgba(33, 150, 243, 0.15), 0 1.5px 6px rgba(0,0,0,0.08)",
+                        border: "none",
+                        transition: "transform 0.3s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s cubic-bezier(.25,.8,.25,1)",
+                        zIndex: "2",
+                      }}>
+                        <Card.Body className="text-center">
+                          <div className="service-icon mb-3">
+                            <Tools size={40} style={{ color: "#00b894" }} />
+                          </div>
+                          <Card.Title>
                               Budget-Based PC Build Recommendation
                             </Card.Title>
                             <Card.Text style={{ textAlign: "justify" }}>
@@ -869,7 +884,14 @@ function HomePage() {
                         </Card>
                       </Col>
                       <Col md={3} className="mb-4">
-                        <Card className="service-card modern-border h-100">
+                        <Card className="service-card modern-border h-100"
+                        style={{
+                          borderRadius: "1.5rem",
+                          boxShadow: "0 8px 32px rgba(33, 150, 243, 0.15), 0 1.5px 6px rgba(0,0,0,0.08)",
+                          border: "none",
+                          transition: "transform 0.3s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s cubic-bezier(.25,.8,.25,1)",
+                          zIndex: "2",
+                        }}>
                           <Card.Body className="text-center">
                             <div className="service-icon mb-3">
                               <PersonCheck
@@ -890,7 +912,14 @@ function HomePage() {
                         </Card>
                       </Col>
                       <Col md={3} className="mb-4">
-                        <Card className="service-card modern-border h-100">
+                        <Card className="service-card modern-border h-100"
+                        style={{
+                          borderRadius: "1.5rem",
+                          boxShadow: "0 8px 32px rgba(33, 150, 243, 0.15), 0 1.5px 6px rgba(0,0,0,0.08)",
+                          border: "none",
+                          transition: "transform 0.3s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s cubic-bezier(.25,.8,.25,1)",
+                          zIndex: "2",
+                        }}>
                           <Card.Body className="text-center">
                             <div className="service-icon mb-3">
                               <Cart size={40} style={{ color: "#6c5ce7" }} />
@@ -915,7 +944,15 @@ function HomePage() {
                     <h2 className="text-center mb-4">Our Process</h2>
                     <Row className="justify-content-center">
                       <Col md={10}>
-                        <div className="d-flex flex-column flex-md-row justify-content-between mb-5">
+                      <Card
+                      style={{
+                        borderRadius: "1.5rem",
+                        boxShadow: "0 8px 32px rgba(33, 150, 243, 0.15), 0 1.5px 6px rgba(0,0,0,0.08)",
+                        border: "none",
+                        transition: "transform 0.3s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s cubic-bezier(.25,.8,.25,1)",
+                        zIndex: "2",
+                      }}>
+                        <div className="d-flex flex-column flex-md-row justify-content-between mt-3 mb-3 mx-3 my-3">
                           <div className="process-step">
                             <div className="process-number">1</div>
                             <div className="process-content">
@@ -923,7 +960,7 @@ function HomePage() {
                               <p className="text-muted mb-0">
                                 Discuss your needs and budget
                               </p>
-                            </div>
+                             </div>
                           </div>
                           <div className="process-step">
                             <div className="process-number">2</div>
@@ -962,7 +999,8 @@ function HomePage() {
                             </div>
                           </div>
                         </div>
-                      </Col>
+                        </Card>
+                        </Col>
                     </Row>
                   </Col>
                 </Row>
@@ -1425,39 +1463,76 @@ function HomePage() {
                           </Form.Group>
 
                           <Form.Group className="mb-4">
-                            <Form.Select
-                              value={contactSubject}
-                              onChange={(e) =>
-                                setContactSubject(e.target.value)
-                              }
-                              style={{
-                                backgroundColor: "transparent",
-                                border: "none",
-                                borderBottom: "2px solid rgba(255,255,255,0.5)",
-                                borderRadius: "0",
-                                color: "white",
-                                padding: "15px 5px",
-                                fontSize: "1.1rem",
+                            <Select
+                              options={[
+                                { value: '', label: 'Subject' },
+                                { value: 'Product Inquiry', label: 'Product Inquiry' },
+                                { value: 'Technical Support', label: 'Technical Support' },
+                                { value: 'Order Status', label: 'Order Status' },
+                                { value: 'Returns & Warranty', label: 'Returns & Warranty' },
+                                { value: 'Other', label: 'Other' }
+                              ]}
+                              value={[
+                                { value: '', label: 'Subject' },
+                                { value: 'Product Inquiry', label: 'Product Inquiry' },
+                                { value: 'Technical Support', label: 'Technical Support' },
+                                { value: 'Order Status', label: 'Order Status' },
+                                { value: 'Returns & Warranty', label: 'Returns & Warranty' },
+                                { value: 'Other', label: 'Other' }
+                              ].find(opt => opt.value === contactSubject)}
+                              onChange={opt => setContactSubject(opt.value)}
+                              placeholder="Subject"
+                              styles={{
+                                control: (base) => ({
+                                  ...base,
+                                  backgroundColor: 'transparent',
+                                  border: 'none',
+                                  borderBottom: '2px solid rgba(255,255,255,0.5)',
+                                  borderRadius: 0,
+                                  color: 'white',
+                                  padding: '7px 5px 7px 5px',
+                                  fontSize: '1.1rem',
+                                  boxShadow: 'none',
+                                  minHeight: 48,
+                                }),
+                                menu: (base) => ({
+                                  ...base,
+                                  background: 'linear-gradient(135deg, #2c3e50 0%, #3b5998 50%, #4a90e2 100%)',
+                                  color: '#fff',
+                                  borderRadius: 20,
+                                  marginTop: 15,
+                                  zIndex: 9999,
+                                }),
+                                option: (base, state) => ({
+                                  ...base,
+                                  backgroundColor: state.isFocused ? '#1976d2' : 'transparent',
+                                  borderRadius: 22,
+                                  color: '#fff',
+                                  fontSize: '1.05rem',
+                                }),
+                                singleValue: (base) => ({
+                                  ...base,
+                                  color: 'white',
+                                }),
+                                placeholder: (base) => ({
+                                  ...base,
+                                  color: 'rgba(255,255,255,0.7)',
+                                }),
+                                dropdownIndicator: (base) => ({
+                                  ...base,
+                                  color: 'white',
+                                }),
+                                indicatorSeparator: (base) => ({
+                                  ...base,
+                                  backgroundColor: 'rgba(255,255,255,0.2)',
+                                }),
+                                input: (base) => ({
+                                  ...base,
+                                  color: 'white',
+                                })
                               }}
-                              className="contact-input-underline"
-                            >
-                              <option value="" style={{ color: "#333" }}>
-                                Subject
-                              </option>
-                              <option style={{ color: "#333" }}>
-                                Product Inquiry
-                              </option>
-                              <option style={{ color: "#333" }}>
-                                Technical Support
-                              </option>
-                              <option style={{ color: "#333" }}>
-                                Order Status
-                              </option>
-                              <option style={{ color: "#333" }}>
-                                Returns & Warranty
-                              </option>
-                              <option style={{ color: "#333" }}>Other</option>
-                            </Form.Select>
+                              isSearchable={false}
+                            />
                           </Form.Group>
 
                           <Form.Group className="mb-5">
@@ -1522,14 +1597,14 @@ function HomePage() {
                   {/* Right Panel - Contact Information with Enhanced Transitions */}
                   <Col lg={6} className="d-flex align-items-center">
                     <div
-                      className="w-100 h-100 d-flex align-items-center justify-content-center contact-info-box"
+                      className="w-100 d-flex align-items-center justify-content-center "
                       style={{
                         backgroundColor: "white",
                         borderRadius: "3rem",
                         margin: "20px",
-                        minHeight: "520px",
+                        minHeight: "750px",
                         boxShadow: "0 15px 50px rgba(0,0,0,0.1)",
-                        transition: "all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)",
+
                         cursor: "pointer",
                         border: "1px solid rgba(0,0,0,0.05)",
                       }}
