@@ -221,6 +221,10 @@ function LoginModal({ show, onHide, switchToRegister }) {
   return (
     <>
       {/* Show login modal only if not in forgot password flow */}
+      {/* Custom backdrop for blur */}
+      {(show && !showForgotModal) && (
+        <div className="custom-login-backdrop" />
+      )}
       <Modal
         show={show && !showForgotModal}
         onHide={onHide}
