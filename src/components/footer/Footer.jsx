@@ -30,81 +30,39 @@ function Footer() {
             <p className="mb-0 small">© {new Date().getFullYear()} GearSphere. All rights reserved.</p>
           </Col>
           <Col md={4} className="mb-4 mb-md-0">
-            <h5 className="mb-3 fw-bold">Quick Links</h5>
-            <ul className="list-unstyled">
-              <li className="mb-2">
-                <span 
-                  onClick={() => scrollToSection('hero')} 
-                  className="text-white-50 text-decoration-none cursor-pointer hover-text-white"
-                  role="button"
-                >
-                  Home
-                </span>
+            <h5 className="mb-3 fw-bold" style={{ marginLeft: '5rem' }}>Quick Links</h5>
+            <ul className="list-unstyled" style={{ display: 'flex', flexWrap: 'wrap', gap: 0 }}>
+              <li className="mb-2" style={{ flex: '0 0 50%' }}>
+                <span onClick={() => scrollToSection('hero')} className="text-white-50 text-decoration-none cursor-pointer hover-text-white" role="button">Home</span>
               </li>
-              <li className="mb-2">
-                <span 
-                  onClick={() => scrollToSection('about')} 
-                  className="text-white-50 text-decoration-none cursor-pointer hover-text-white"
-                  role="button"
-                >
-                  About Us
-                </span>
+              <li className="mb-2" style={{ flex: '0 0 50%' }}>
+                <span onClick={() => scrollToSection('about')} className="text-white-50 text-decoration-none cursor-pointer hover-text-white" role="button">About Us</span>
               </li>
-              <li className="mb-2">
-                <span 
-                  onClick={() => scrollToSection('services')} 
-                  className="text-white-50 text-decoration-none cursor-pointer hover-text-white"
-                  role="button"
-                >
-                  Services
-                </span>
+              <li className="mb-2" style={{ flex: '0 0 50%' }}>
+                <span onClick={() => scrollToSection('services')} className="text-white-50 text-decoration-none cursor-pointer hover-text-white" role="button">Services</span>
               </li>
-              <li className="mb-2">
-                <span 
-                  onClick={() => scrollToSection('products')} 
-                  className="text-white-50 text-decoration-none cursor-pointer hover-text-white"
-                  role="button"
-                >
-                  Products
-                </span>
+              <li className="mb-2" style={{ flex: '0 0 50%' }}>
+                <span onClick={() => scrollToSection('products')} className="text-white-50 text-decoration-none cursor-pointer hover-text-white" role="button">Products</span>
               </li>
-              <li className="mb-2">
-                <span 
-                  onClick={() => scrollToSection('reviews')} 
-                  className="text-white-50 text-decoration-none cursor-pointer hover-text-white"
-                  role="button"
-                >
-                  Reviews
-                </span>
+              <li className="mb-2" style={{ flex: '0 0 50%' }}>
+                <span onClick={() => scrollToSection('reviews')} className="text-white-50 text-decoration-none cursor-pointer hover-text-white" role="button">Reviews</span>
               </li>
-              <li className="mb-2">
-                <span 
-                  onClick={() => scrollToSection('contact')} 
-                  className="text-white-50 text-decoration-none cursor-pointer hover-text-white"
-                  role="button"
-                >
-                  Contact
-                </span>
+              <li className="mb-2" style={{ flex: '0 0 50%' }}>
+                <span onClick={() => scrollToSection('contact')} className="text-white-50 text-decoration-none cursor-pointer hover-text-white" role="button">Contact</span>
               </li>
             </ul>
           </Col>
           <Col md={4}>
-            <h5 className="mb-3 fw-bold">Contact Info</h5>
+            <h5 className="mb-3 fw-bold" style={{ marginLeft: '5rem' }}>Contact Info</h5>
             <ul className="list-unstyled">
-              <li className="mb-2 text-white-50">
+              <li className="mb-2 text-white-50" style={{ fontSize: '0.9rem' }}>
                 <strong>Address:</strong> Pasara Road, Badulla City, 90 000
               </li>
-              <li className="mb-2 text-white-50">
-                <strong>Phone:</strong> +94 (76) 375 3730
+              <li className="mb-2 text-white-50" style={{ fontSize: '0.9rem' }}>
+                <strong>Phone:</strong> +94 (70) 407 9547 & +94 (76) 375 3730
               </li>
-              <li className="mb-2 text-white-50">
-                <strong>Phone:</strong> +94 (70) 407 9547
-              </li>
-              <li className="mb-2 text-white-50">
-                <strong>Email:</strong> info@gearsphere.com
-              </li>
-              <li className="text-white-50">
-                <strong>Email:</strong> support@gearsphere.com
+              <li className="mb-2 text-white-50" style={{ fontSize: '0.9rem' }}>
+                <strong>Email:</strong> info@gearsphere.com & support@gearsphere.com
               </li>
             </ul>
           </Col>
