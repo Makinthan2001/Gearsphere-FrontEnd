@@ -425,7 +425,10 @@ const ProductManagement = () => {
                   type="text"
                   placeholder="Search by name or category..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
                 />
               </Form.Group>
             </Col>
@@ -434,7 +437,10 @@ const ProductManagement = () => {
                 <Form.Label>Category Filter</Form.Label>
                 <Form.Select
                   value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  onChange={(e) => {
+                    setCategoryFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
                 >
                   <option value="all">All Categories</option>
                   {categories.map((category) => (
