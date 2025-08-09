@@ -14,6 +14,10 @@ import {
   Table,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "../../styles.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Select from 'react-select';
+
 import {
   Calendar,
   CurrencyDollar,
@@ -362,7 +366,7 @@ function TechnicianDashboard() {
                         <th>Phone</th>
                         <th>Date Assigned</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        
                       </tr>
                     </thead>
                     <tbody>
@@ -393,16 +397,7 @@ function TechnicianDashboard() {
                           <td>
                             <Badge bg="warning">Pending</Badge>
                           </td>
-                          <td>
-                            <div className="d-flex gap-2">
-                              <Button variant="success" size="sm">
-                                Accept
-                              </Button>
-                              <Button variant="outline-primary" size="sm">
-                                View Details
-                              </Button>
-                            </div>
-                          </td>
+                          
                         </tr>
                       ))}
                     </tbody>
@@ -442,11 +437,6 @@ function TechnicianDashboard() {
             )}
           </Col>
         </Row>
-
-        {/* Contact Section */}
-        <Row className="mt-4">
-          <Col></Col>
-        </Row>
       </Container>
       {/* Contact Section */}
       <section
@@ -458,181 +448,479 @@ function TechnicianDashboard() {
           marginBottom: 0,
         }}
       >
+
         <Container>
-          <h1 className="text-center mb-5">Contact Us</h1>
-          <Row className="mb-5">
-            <Col lg={6} className="mb-4 mb-lg-0">
-              <h2 className="mb-4">Get In Touch</h2>
-              <p className="mb-4">
-                Have questions about your appointments or need support? Fill out
-                the form and our team will get back to you as soon as possible.
-              </p>
-              <Form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (
-                    !contactFirstName ||
-                    !contactLastName ||
-                    !contactEmail ||
-                    !contactSubject ||
-                    !contactMessage
-                  ) {
-                    toast.error("Please fill in all fields.");
-                    return;
-                  }
-                  setContactLoading(true);
-                  try {
-                    const res = await axios.post(
-                      "http://localhost/gearsphere_api/GearSphere-BackEnd/addMessage.php",
-                      {
-                        name: contactFirstName + " " + contactLastName,
-                        email: contactEmail,
-                        subject: contactSubject,
-                        message: contactMessage,
-                      }
-                    );
-                    if (res.data.success) {
-                      toast.success("Thanks for contacting admin!");
-                      setContactFirstName("");
-                      setContactLastName("");
-                      setContactEmail("");
-                      setContactSubject("");
-                      setContactMessage("");
-                    } else {
-                      toast.error(
-                        res.data.message || "Failed to send message."
-                      );
-                    }
-                  } catch (err) {
-                    toast.error("Failed to send message.");
-                  }
-                  setContactLoading(false);
-                }}
-              >
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter first name"
-                        value={contactFirstName}
-                        onChange={(e) => setContactFirstName(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter last name"
-                        value={contactLastName}
-                        onChange={(e) => setContactLastName(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Subject</Form.Label>
-                  <Form.Select
-                    value={contactSubject}
-                    onChange={(e) => setContactSubject(e.target.value)}
-                  >
-                    <option value="">Select a subject</option>
-                    <option>Appointment Inquiry</option>
-                    <option>Technical Support</option>
-                    <option>Account Issues</option>
-                    <option>Other</option>
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Message</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Enter your message"
-                    value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
-                  />
-                </Form.Group>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="w-100"
-                  disabled={contactLoading}
-                >
-                  {contactLoading ? "Sending..." : "Send Message"}
-                </Button>
-              </Form>
-            </Col>
-            <Col lg={6}>
-              <Row className="mb-4">
-                <Col md={12}>
-                  <Card className="border-0 shadow-sm">
-                    <Card.Body>
-                      <h3 className="mb-4">Contact Information</h3>
-                      <div className="d-flex mb-3">
-                        <div className="me-3">
-                          <Envelope size={24} className="text-primary" />
-                        </div>
-                        <div>
-                          <h5 className="mb-1">Email</h5>
-                          <p className="mb-0">info@gearsphere.com</p>
-                          <p className="mb-0">support@gearsphere.com</p>
-                        </div>
-                      </div>
-                      <div className="d-flex mb-3">
-                        <div className="me-3">
-                          <Telephone size={24} className="text-primary" />
-                        </div>
-                        <div>
-                          <h5 className="mb-1">Phone</h5>
-                          <p className="mb-0">+94 (76) 375 3730</p>
-                          <p className="mb-0">+94 (70) 407 9547</p>
-                        </div>
-                      </div>
-                      <div className="d-flex mb-3">
-                        <div className="me-3">
-                          <GeoAlt size={24} className="text-primary" />
-                        </div>
-                        <div>
-                          <h5 className="mb-1">Address</h5>
-                          <p className="mb-0">
-                            Pasara Road, Badulla City, 90 000
-                          </p>
-                        </div>
-                      </div>
-                      {/* Logo at bottom */}
-                      <div className="d-flex justify-content-center mt-4">
-                        <img
-                          src={logo}
-                          alt="GearSphere Logo"
-                          style={{
-                            height: 60,
-                            width: "auto",
-                            background: "#fff",
-                            padding: 4,
-                            borderRadius: 8,
-                          }}
-                        />
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+                        <h1 className="text-center mb-5">Contact Us</h1>
+                        <Row
+                          className="align-items-stretch"
+                          style={{ minHeight: "600px" }}
+                        >
+                          {/* Left Panel - Contact Form with Blue Background */}
+                          <Col lg={6} className="d-flex align-items-center">
+                            <div className="w-100 p-4">
+                              <div
+                                style={{
+                                  background:
+                                    "linear-gradient(135deg, #2c3e50 0%, #3b5998 50%, #4a90e2 100%)",
+                                  borderRadius: "2rem",
+                                  padding: "3rem 2.5rem",
+                                  boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+                                }}
+                              >
+                                <h2
+                                  className="text-white mb-2 fw-bold"
+                                  style={{ fontSize: "2.5rem" }}
+                                >
+                                  Contact Us
+                                </h2>
+                                <p
+                                  className="text-white mb-5"
+                                  style={{ opacity: 0.9, fontSize: "1.1rem" }}
+                                >
+                                  Have questions about our products or services? Fill
+                                  out the form and our team will get back to you.
+                                </p>
+                                <Form
+                                  onSubmit={async (e) => {
+                                    e.preventDefault();
+                                    if (
+                                      !contactFirstName ||
+                                      !contactLastName ||
+                                      !contactEmail ||
+                                      !contactSubject ||
+                                      !contactMessage
+                                    ) {
+                                      toast.error("Please fill in all fields.");
+                                      return;
+                                    }
+                                    setContactLoading(true);
+                                    try {
+                                      const res = await axios.post(
+                                        "http://localhost/gearsphere_api/GearSphere-BackEnd/addMessage.php",
+                                        {
+                                          name:
+                                            contactFirstName + " " + contactLastName,
+                                          email: contactEmail,
+                                          subject: contactSubject,
+                                          message: contactMessage,
+                                        }
+                                      );
+                                      if (res.data.success) {
+                                        toast.success("Thanks for contacting admin!");
+                                        setContactFirstName("");
+                                        setContactLastName("");
+                                        setContactEmail("");
+                                        setContactSubject("");
+                                        setContactMessage("");
+                                      } else {
+                                        toast.error(
+                                          res.data.message || "Failed to send message."
+                                        );
+                                      }
+                                    } catch (err) {
+                                      toast.error("Failed to send message.");
+                                    }
+                                    setContactLoading(false);
+                                  }}
+                                >
+                                  <Row>
+                                    <Col md={6}>
+                                      <Form.Group className="mb-4">
+                                        <Form.Control
+                                          type="text"
+                                          placeholder="First Name"
+                                          value={contactFirstName}
+                                          onChange={(e) =>
+                                            setContactFirstName(e.target.value)
+                                          }
+                                          style={{
+                                            backgroundColor: "transparent",
+                                            border: "none",
+                                            borderBottom:
+                                              "2px solid rgba(255,255,255,0.5)",
+                                            borderRadius: "0",
+                                            color: "white",
+                                            padding: "15px 5px",
+                                            fontSize: "1.1rem",
+                                          }}
+                                          className="contact-input-underline"
+                                        />
+                                      </Form.Group>
+                                    </Col>
+                                    <Col md={6}>
+                                      <Form.Group className="mb-4">
+                                        <Form.Control
+                                          type="text"
+                                          placeholder="Last Name"
+                                          value={contactLastName}
+                                          onChange={(e) =>
+                                            setContactLastName(e.target.value)
+                                          }
+                                          style={{
+                                            backgroundColor: "transparent",
+                                            border: "none",
+                                            borderBottom:
+                                              "2px solid rgba(255,255,255,0.5)",
+                                            borderRadius: "0",
+                                            color: "white",
+                                            padding: "15px 5px",
+                                            fontSize: "1.1rem",
+                                          }}
+                                          className="contact-input-underline"
+                                        />
+                                      </Form.Group>
+                                    </Col>
+                                  </Row>
+        
+                                  <Form.Group className="mb-4">
+                                    <Form.Control
+                                      type="email"
+                                      placeholder="Email Address"
+                                      value={contactEmail}
+                                      onChange={(e) => setContactEmail(e.target.value)}
+                                      style={{
+                                        backgroundColor: "transparent",
+                                        border: "none",
+                                        borderBottom: "2px solid rgba(255,255,255,0.5)",
+                                        borderRadius: "0",
+                                        color: "white",
+                                        padding: "15px 5px",
+                                        fontSize: "1.1rem",
+                                      }}
+                                      className="contact-input-underline"
+                                    />
+                                  </Form.Group>
+        
+                                  <Form.Group className="mb-4">
+                                    <Select
+                                      options={[
+                                        { value: '', label: 'Subject' },
+                                        { value: 'Product Inquiry', label: 'Product Inquiry' },
+                                        { value: 'Technical Support', label: 'Technical Support' },
+                                        { value: 'Order Status', label: 'Order Status' },
+                                        { value: 'Returns & Warranty', label: 'Returns & Warranty' },
+                                        { value: 'Other', label: 'Other' }
+                                      ]}
+                                      value={[
+                                        { value: '', label: 'Subject' },
+                                        { value: 'Product Inquiry', label: 'Product Inquiry' },
+                                        { value: 'Technical Support', label: 'Technical Support' },
+                                        { value: 'Order Status', label: 'Order Status' },
+                                        { value: 'Returns & Warranty', label: 'Returns & Warranty' },
+                                        { value: 'Other', label: 'Other' }
+                                      ].find(opt => opt.value === contactSubject)}
+                                      onChange={opt => setContactSubject(opt.value)}
+                                      placeholder="Subject"
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          backgroundColor: 'transparent',
+                                          border: 'none',
+                                          borderBottom: '2px solid rgba(255,255,255,0.5)',
+                                          borderRadius: 0,
+                                          color: 'white',
+                                          padding: '7px 5px 7px 5px',
+                                          fontSize: '1.1rem',
+                                          boxShadow: 'none',
+                                          minHeight: 48,
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          background: 'linear-gradient(135deg, #2c3e50 0%, #3b5998 50%, #4a90e2 100%)',
+                                          color: '#fff',
+                                          borderRadius: 20,
+                                          marginTop: 15,
+                                          zIndex: 9999,
+                                        }),
+                                        option: (base, state) => ({
+                                          ...base,
+                                          backgroundColor: state.isFocused ? '#1976d2' : 'transparent',
+                                          borderRadius: 22,
+                                          color: '#fff',
+                                          fontSize: '1.05rem',
+                                        }),
+                                        singleValue: (base) => ({
+                                          ...base,
+                                          color: 'white',
+                                        }),
+                                        placeholder: (base) => ({
+                                          ...base,
+                                          color: 'rgba(255,255,255,0.7)',
+                                        }),
+                                        dropdownIndicator: (base) => ({
+                                          ...base,
+                                          color: 'white',
+                                        }),
+                                        indicatorSeparator: (base) => ({
+                                          ...base,
+                                          backgroundColor: 'rgba(255,255,255,0.2)',
+                                        }),
+                                        input: (base) => ({
+                                          ...base,
+                                          color: 'white',
+                                        })
+                                      }}
+                                      isSearchable={false}
+                                    />
+                                  </Form.Group>
+        
+                                  <Form.Group className="mb-5">
+                                    <Form.Control
+                                      as="textarea"
+                                      rows={4}
+                                      placeholder="Enter your message..."
+                                      value={contactMessage}
+                                      onChange={(e) =>
+                                        setContactMessage(e.target.value)
+                                      }
+                                      style={{
+                                        backgroundColor: "transparent",
+                                        border: "none",
+                                        borderBottom: "2px solid rgba(255,255,255,0.5)",
+                                        borderRadius: "0",
+                                        color: "white",
+                                        padding: "15px 5px",
+                                        fontSize: "1.1rem",
+                                        resize: "none",
+                                      }}
+                                      className="contact-input-underline"
+                                    />
+                                  </Form.Group>
+        
+                                  <Button
+                                    variant="light"
+                                    type="submit"
+                                    disabled={contactLoading}
+                                    className="w-100"
+                                    style={{
+                                      backgroundColor: "white",
+                                      color: "#2c3e50",
+                                      border: "none",
+                                      borderRadius: "30px",
+                                      padding: "15px 30px",
+                                      fontSize: "1.2rem",
+                                      fontWeight: "600",
+                                      boxShadow: "0 6px 20px rgba(0,0,0,0.2)",
+                                      transition: "all 0.3s ease",
+                                      textTransform: "uppercase",
+                                      letterSpacing: "1px",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.target.style.transform = "translateY(-3px)";
+                                      e.target.style.boxShadow =
+                                        "0 8px 25px rgba(0,0,0,0.3)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.style.transform = "translateY(0)";
+                                      e.target.style.boxShadow =
+                                        "0 6px 20px rgba(0,0,0,0.2)";
+                                    }}
+                                  >
+                                    {contactLoading ? "Sending..." : "Send Message"}
+                                  </Button>
+                                </Form>
+                              </div>
+                            </div>
+                          </Col>
+        
+                          {/* Right Panel - Contact Information with Enhanced Transitions */}
+                          <Col lg={6} className="d-flex align-items-center">
+                            <div
+                              className="w-100 d-flex align-items-center justify-content-center "
+                              style={{
+                                backgroundColor: "white",
+                                borderRadius: "3rem",
+                                margin: "20px",
+                                minHeight: "750px",
+                                boxShadow: "0 15px 50px rgba(0,0,0,0.1)",
+        
+                                cursor: "pointer",
+                                border: "1px solid rgba(0,0,0,0.05)",
+                              }}
+                            >
+                              <div className="text-center p-5">
+                                <div className="mb-5">
+                                  <h2
+                                    className="fw-bold mb-3"
+                                    style={{
+                                      color: "#2c3e50",
+                                      fontSize: "2.2rem",
+                                      textTransform: "lowercase",
+                                    }}
+                                  >
+                                    contact us
+                                  </h2>
+                                  <h3
+                                    className="fw-bold"
+                                    style={{
+                                      color: "#333",
+                                      fontSize: "1.3rem",
+                                      marginBottom: "3rem",
+                                      textTransform: "uppercase",
+                                      letterSpacing: "2px",
+                                    }}
+                                  >
+                                    PLEASE GET IN TOUCH
+                                  </h3>
+                                </div>
+        
+                                <div className="contact-info-item mb-4 d-flex align-items-center justify-content-start">
+                                  <div
+                                    className="contact-icon me-4"
+                                    style={{
+                                      backgroundColor: "#f8f9fa",
+                                      borderRadius: "50%",
+                                      width: "65px",
+                                      height: "65px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      flexShrink: 0,
+                                      transition: "all 0.3s ease",
+                                      border: "2px solid #e9ecef",
+                                    }}
+                                  >
+                                    <GeoAlt
+                                      size={26}
+                                      style={{
+                                        color: "#6c757d",
+                                        transition: "color 0.3s ease",
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="text-start">
+                                    <p
+                                      className="mb-1 fw-bold"
+                                      style={{ color: "#333", fontSize: "1.2rem" }}
+                                    >
+                                      Address:
+                                    </p>
+                                    <p
+                                      className="mb-0"
+                                      style={{
+                                        color: "#6c757d",
+                                        fontSize: "1rem",
+                                        lineHeight: "1.5",
+                                      }}
+                                    >
+                                      Pasara Road, Badulla City, 90 000
+                                    </p>
+                                  </div>
+                                </div>
+        
+                                <div className="contact-info-item mb-4 d-flex align-items-center justify-content-start">
+                                  <div
+                                    className="contact-icon me-4"
+                                    style={{
+                                      backgroundColor: "#f8f9fa",
+                                      borderRadius: "50%",
+                                      width: "65px",
+                                      height: "65px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      flexShrink: 0,
+                                      transition: "all 0.3s ease",
+                                      border: "2px solid #e9ecef",
+                                    }}
+                                  >
+                                    <Telephone
+                                      size={26}
+                                      style={{
+                                        color: "#6c757d",
+                                        transition: "color 0.3s ease",
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="text-start">
+                                    <p
+                                      className="mb-1 fw-bold"
+                                      style={{ color: "#333", fontSize: "1.2rem" }}
+                                    >
+                                      Phone:
+                                    </p>
+                                    <p
+                                      className="mb-0"
+                                      style={{
+                                        color: "#6c757d",
+                                        fontSize: "1rem",
+                                        lineHeight: "1.5",
+                                      }}
+                                    >
+                                      +94 (76) 375 3730
+                                    </p>
+                                    <p
+                                      className="mb-0"
+                                      style={{
+                                        color: "#6c757d",
+                                        fontSize: "1rem",
+                                        lineHeight: "1.5",
+                                      }}
+                                    >
+                                      +94 (70) 407 9547
+                                    </p>
+                                  </div>
+                                </div>
+        
+                                <div className="contact-info-item mb-4 d-flex align-items-center justify-content-start">
+                                  <div
+                                    className="contact-icon me-4"
+                                    style={{
+                                      backgroundColor: "#f8f9fa",
+                                      borderRadius: "50%",
+                                      width: "65px",
+                                      height: "65px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      flexShrink: 0,
+                                      transition: "all 0.3s ease",
+                                      border: "2px solid #e9ecef",
+                                    }}
+                                  >
+                                    <Envelope
+                                      size={26}
+                                      style={{
+                                        color: "#6c757d",
+                                        transition: "color 0.3s ease",
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="text-start">
+                                    <p
+                                      className="mb-1 fw-bold"
+                                      style={{ color: "#333", fontSize: "1.2rem" }}
+                                    >
+                                      Email:
+                                    </p>
+                                    <p
+                                      className="mb-0"
+                                      style={{
+                                        color: "#6c757d",
+                                        fontSize: "1rem",
+                                        lineHeight: "1.5",
+                                      }}
+                                    >
+                                      info@gearsphere.com
+                                    </p>
+                                    <p
+                                      className="mb-0"
+                                      style={{
+                                        color: "#6c757d",
+                                        fontSize: "1rem",
+                                        lineHeight: "1.5",
+                                      }}
+                                    >
+                                      support@gearsphere.com
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
+        
       </section>
     </>
   );
