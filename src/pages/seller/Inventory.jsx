@@ -499,7 +499,10 @@ const Inventory = () => {
               <Form.Select
                 style={{ width: "200px" }}
                 value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
+                onChange={(e) => {
+  setCategoryFilter(e.target.value);
+  setCurrentPage(1);
+}}
               >
                 <option value="all">All Categories</option>
                 {categories.map((category) => (
@@ -511,7 +514,10 @@ const Inventory = () => {
               <Form.Select
                 style={{ width: "200px" }}
                 value={stockFilter}
-                onChange={(e) => setStockFilter(e.target.value)}
+                onChange={(e) => {
+  setStockFilter(e.target.value);
+  setCurrentPage(1);
+}}
               >
                 <option value="all">All Stock Status</option>
                 <option value="In Stock">In Stock</option>
@@ -524,7 +530,10 @@ const Inventory = () => {
               placeholder="Search by name, SKU, or category..."
               style={{ width: "300px" }}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+  setSearchQuery(e.target.value);
+  setCurrentPage(1);
+}}
             />
           </div>
 
