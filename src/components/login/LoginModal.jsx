@@ -151,26 +151,35 @@ function LoginModal({ show, onHide, switchToRegister }) {
         const response = await axios.post(
           "http://localhost/gearsphere_api/GearSphere-BackEnd/generateOTP.php",
           {
-            email: forgotPasswordEmail.trim(), //username: forgotPasswordUsername,
+            email: forgotPasswordEmail.trim(),
+          },
+          {
+            withCredentials: true, // Essential for session management
           }
         );
-        // console.log(response.data)
         if (response.data.success) {
           toast.success(response.data.message);
-          setCheckOTP(response.data.otp);
-          //console.log(response.data.otp);
           setStep(2);
         } else {
           toast.error(response.data.message);
         }
       } else if (step === 2) {
-        //console.log(otp);
-        if (otp.trim() === checkOTP.toString().trim()) {
-          toast.success("OTP verified successfully...");
-          setCheckOTP("");
+        // Verify OTP using secure session-based verification
+        const response = await axios.post(
+          "http://localhost/gearsphere_api/GearSphere-BackEnd/verifyPasswordResetOtp.php",
+          {
+            otp: otp.trim(),
+          },
+          {
+            withCredentials: true, // Essential for session management
+          }
+        );
+
+        if (response.data.success) {
+          toast.success("OTP verified successfully.");
           setStep(3);
         } else {
-          toast.error("Invalid OTP, Try again later...");
+          toast.error(response.data.message);
           setStep(1);
         }
       } else if (step === 3) {
@@ -222,9 +231,7 @@ function LoginModal({ show, onHide, switchToRegister }) {
     <>
       {/* Show login modal only if not in forgot password flow */}
       {/* Custom backdrop for blur */}
-      {(show && !showForgotModal) && (
-        <div className="custom-login-backdrop" />
-      )}
+      {show && !showForgotModal && <div className="custom-login-backdrop" />}
       <Modal
         show={show && !showForgotModal}
         onHide={onHide}

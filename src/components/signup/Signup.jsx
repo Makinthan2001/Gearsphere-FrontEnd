@@ -75,32 +75,43 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
   const sendOTP = async () => {
     try {
       const res = await axios.post(
-        "http://localhost/gearsphere_api/GearSphere-BackEnd/emailValidationOTP.php",
+        "http://localhost/gearsphere_api/GearSphere-BackEnd/emailValidation.php",
         { email },
-        { withCredentials: true }
+        { withCredentials: true } // Essential for session management
       );
       if (res.data.success) {
-        setSentOtp(res.data.otp);
         toast.success("OTP sent to your email.");
         setOtpModalVisible(true);
       } else {
         toast.error(res.data.message || "Failed to send OTP.");
       }
     } catch (err) {
+      console.error("OTP send error:", err);
       toast.error("Error sending OTP.");
     }
   };
 
   const handleOtpSubmit = async () => {
-    if (parseInt(enteredOtp) === parseInt(sentOtp)) {
-      toast.success("OTP verified successfully.");
-      setOtpModalVisible(false);
-      if (isTechnician) {
-        setOpenInstruct(true);
+    try {
+      const response = await axios.post(
+        "http://localhost/gearsphere_api/GearSphere-BackEnd/verifyOtp.php",
+        { otp: enteredOtp },
+        { withCredentials: true } // Essential for session management
+      );
+
+      if (response.data.success) {
+        toast.success("OTP verified successfully.");
+        setOtpModalVisible(false);
+        if (isTechnician) {
+          setOpenInstruct(true);
+        } else {
+          await registerCustomer();
+        }
       } else {
-        await registerCustomer();
+        toast.error(response.data.message);
       }
-    } else {
+    } catch (err) {
+      console.error("OTP verification error:", err);
       toast.error("OTP verification failed. Please try again.");
     }
   };
@@ -299,7 +310,7 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
       );
       return;
     }
-    await sendOTP(email);
+    await sendOTP();
   };
 
   // Prevent background scroll when any modal is open
@@ -307,7 +318,12 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
     const body = document.body;
     const isAnyModalOpen = !openInstruct && !showTechDetailsForm; // Main signup modal is open
 
-    if (isAnyModalOpen || openInstruct || showTechDetailsForm || otpModalVisible) {
+    if (
+      isAnyModalOpen ||
+      openInstruct ||
+      showTechDetailsForm ||
+      otpModalVisible
+    ) {
       const originalStyle = body.style.overflow;
       body.style.overflow = "hidden";
       return () => {
