@@ -203,7 +203,7 @@ function AdminDashboard() {
 
         {/* Dashboard Data Tables */}
         <Row className="mt-5">
-          <Col md={6} className={styles["dashboard-section"]}>
+          <Col md={12} className={styles["dashboard-section"]}>
             <h4 className={styles["dashboard-title"]}>New Customers</h4>
             <Table
               className={styles["dashboard-table"]}
@@ -239,7 +239,7 @@ function AdminDashboard() {
               </tbody>
             </Table>
           </Col>
-          <Col md={6} className={styles["dashboard-section"]}>
+          <Col md={12} className={styles["dashboard-section"]}>
             <h4 className={styles["dashboard-title"]}>New Technicians</h4>
             <Table
               className={styles["dashboard-table"]}
@@ -277,7 +277,7 @@ function AdminDashboard() {
           </Col>
         </Row>
         <Row className="mt-4">
-          <Col md={6} className={styles["dashboard-section"]}>
+          <Col md={12} className={styles["dashboard-section"]}>
             <h4 className={styles["dashboard-title"]}>New Reviews</h4>
             <Table
               className={styles["dashboard-table"]}
@@ -310,7 +310,7 @@ function AdminDashboard() {
               </tbody>
             </Table>
           </Col>
-          <Col md={6} className={styles["dashboard-section"]}>
+          <Col md={12} className={styles["dashboard-section"]}>
             <h4 className={styles["dashboard-title"]}>New Messages</h4>
             <Table
               className={styles["dashboard-table"]}
