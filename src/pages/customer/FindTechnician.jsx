@@ -111,14 +111,43 @@ function FindTechnician() {
     // Only show approved technicians
     const isApproved = tech.approve_status === "approved";
 
-    const matchesDistrict =
-      !selectedDistrict ||
-      (tech.address && tech.address.includes(selectedDistrict));
-    const matchesSpecialization =
-      !selectedService ||
-      (Array.isArray(tech.specialization)
-        ? tech.specialization.includes(selectedService)
-        : tech.specialization && tech.specialization === selectedService);
+    // Improved district matching - extract district from address
+    const matchesDistrict = !selectedDistrict || (() => {
+      if (!tech.address) return false;
+      
+      // Split address by comma and check if the last part (district) matches
+      const addressParts = tech.address.split(', ');
+      if (addressParts.length >= 2) {
+        const district = addressParts[addressParts.length - 1].trim();
+        return district === selectedDistrict;
+      }
+      
+      // Fallback: check if address contains the district
+      return tech.address.includes(selectedDistrict);
+    })();
+    
+    // Improved specialization matching
+    const matchesSpecialization = !selectedService || (() => {
+      if (!tech.specialization) return false;
+      
+      // Handle array of specializations
+      if (Array.isArray(tech.specialization)) {
+        return tech.specialization.some(spec => {
+          if (typeof spec === 'string') {
+            // Case-insensitive comparison and trimming
+            return spec.trim().toLowerCase() === selectedService.trim().toLowerCase();
+          }
+          return false;
+        });
+      }
+      
+      // Handle single specialization string
+      if (typeof tech.specialization === 'string') {
+        return tech.specialization.trim().toLowerCase() === selectedService.trim().toLowerCase();
+      }
+      
+      return false;
+    })();
 
     return isApproved && matchesDistrict && matchesSpecialization;
   });
@@ -392,8 +421,7 @@ function FindTechnician() {
                       )}
                     </div>
                     <div className="text-muted small mb-1">
-                      <GeoAlt className="me-1" size={14} /> {tech.address}{" "}
-                      District
+                      <GeoAlt className="me-1" size={14} /> {tech.address}
                     </div>
                     <div className="d-flex flex-column flex-sm-row flex-wrap gap-1 gap-sm-2 mb-1 justify-content-center align-items-center">
                       <span className="text-muted small">
