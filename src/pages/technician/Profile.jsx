@@ -15,10 +15,20 @@ const TechnicianProfile = () => {
     email: "",
     status: "available", // <-- add status to state
   });
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [addressWithoutDistrict, setAddressWithoutDistrict] = useState("");
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef();
+
+  // Sri Lankan districts
+  const districts = [
+    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
+    'Galle', 'Matara', 'Hambantota', 'Kurunegala', 'Anuradhapura', 'Polonnaruwa',
+    'Ratnapura', 'Kegalle', 'Badulla', 'Monaragala', 'Ampara', 'Batticaloa',
+    'Trincomalee', 'Jaffna', 'Mannar', 'Vavuniya', 'Kilinochchi', 'Mullaitivu'
+  ];
 
   useEffect(() => {
     const fetchTechnicianData = async () => {
@@ -51,6 +61,25 @@ const TechnicianProfile = () => {
             ? `http://localhost/gearsphere_api/GearSphere-BackEnd/profile_images/${data.technician.profile_image}`
             : "/profile_images/user_image.jpg";
 
+          // Parse address to extract district and address parts
+          let district = "";
+          let addressPart = "";
+          
+          if (data.technician.address) {
+            console.log("Technician address:", data.technician.address);
+            const addressParts = data.technician.address.split(', ');
+            console.log("Address parts:", addressParts);
+            if (addressParts.length >= 2) {
+              district = addressParts[addressParts.length - 1]; // Last part is district
+              addressPart = addressParts.slice(0, -1).join(', '); // Everything except last part
+              console.log("Parsed district:", district);
+              console.log("Parsed address part:", addressPart);
+            } else {
+              addressPart = data.technician.address; // If no comma, treat as address without district
+              console.log("No comma found, treating as address without district");
+            }
+          }
+
           setFormData({
             name: data.technician.name || "",
             contact_number: data.technician.contact_number || "",
@@ -63,6 +92,9 @@ const TechnicianProfile = () => {
             technician_id: data.technician.technician_id || "",
             status: data.technician.status || "available",
           });
+
+          setSelectedDistrict(district);
+          setAddressWithoutDistrict(addressPart);
 
           // Trigger profile pic update event for navbar
           window.dispatchEvent(new Event("profilePicUpdated"));
@@ -87,7 +119,35 @@ const TechnicianProfile = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleProfilePicChange = (e) => {
+  const handleDistrictChange = (e) => {
+    const district = e.target.value;
+    setSelectedDistrict(district);
+    
+    // Update the full address in formData (same format as customer profile)
+    const fullAddress = addressWithoutDistrict && district 
+      ? `${addressWithoutDistrict}, ${district}`
+      : addressWithoutDistrict || district;
+    
+    setFormData((prev) => ({ 
+      ...prev, 
+      address: fullAddress 
+    }));
+  };
+
+  const handleAddressChange = (e) => {
+    const address = e.target.value;
+    setAddressWithoutDistrict(address);
+    
+    // Update the full address in formData (same format as customer profile)
+    const fullAddress = address && selectedDistrict 
+      ? `${address}, ${selectedDistrict}` 
+      : address || selectedDistrict;
+    
+    setFormData((prev) => ({ 
+      ...prev, 
+      address: fullAddress 
+    }));
+  };  const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfilePicFile(file);
@@ -225,13 +285,13 @@ const TechnicianProfile = () => {
                   <b>Email:</b> {formData.email}
                 </p>
                 <p>
-                  <b>Contact:</b> {formData.contact_number}
+                  <b>Contact:</b> {formData.contact_number || "Contact not set"}
                 </p>
                 <p>
-                  <b>Address:</b> {formData.address}
+                  <b>Address:</b> {formData.address || "Address not set"}
                 </p>
                 <p>
-                  <b>Charge/Day:</b> Rs. {formData.charge_per_day}
+                  <b>Charge/Day:</b> Rs. {formData.charge_per_day || "Not set"}
                 </p>
                 <p>
                   <b>Status:</b>{" "}
@@ -330,13 +390,28 @@ const TechnicianProfile = () => {
               <Form.Group className="mb-3">
                 <Form.Label>Address</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Point Pedro | Jaffna"
+                  as="textarea"
+                  rows={3}
+                  value={addressWithoutDistrict}
+                  onChange={handleAddressChange}
+                  placeholder="Enter your detailed address (without district)"
                   autoComplete="street-address"
                 />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>District</Form.Label>
+                <Form.Select
+                  value={selectedDistrict}
+                  onChange={handleDistrictChange}
+                >
+                  <option value="">Select District</option>
+                  {districts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
 
               <Form.Group className="mb-3">
