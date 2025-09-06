@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 const DeliveryCalculator = ({ cartTotal, onDeliveryUpdate }) => {
@@ -10,7 +10,7 @@ const DeliveryCalculator = ({ cartTotal, onDeliveryUpdate }) => {
     const [userId, setUserId] = useState(null);
     const [newAddress, setNewAddress] = useState('');
     const [selectedDistrict, setSelectedDistrict] = useState('');
-    const [showModal, setShowModal] = useState(false);
+    const [showAddressForm, setShowAddressForm] = useState(false);
 
     // Sri Lankan districts with delivery charges
     const districts = [
@@ -42,236 +42,201 @@ const DeliveryCalculator = ({ cartTotal, onDeliveryUpdate }) => {
 
     // Helper function to get district from address
     const getDistrictFromAddress = (address) => {
-        const addr = address.toLowerCase();
-        for (const district of districts) {
-            if (district.areas.some(area => addr.includes(area))) {
-                return district.name;
-            }
-        }
-        return '';
-    };
-
-    // Delivery rates for Sri Lankan cities (in LKR)
-    const getDeliveryCharge = (address) => {
-        const addr = address.toLowerCase();
+        if (!address) return null;
+        
+        const addressLower = address.toLowerCase();
         
         for (const district of districts) {
-            if (district.areas.some(area => addr.includes(area))) {
-                return district.charge;
+            // Check if district name is in address
+            if (addressLower.includes(district.name.toLowerCase())) {
+                return district;
+            }
+            
+            // Check if any area in the district is mentioned
+            for (const area of district.areas) {
+                if (addressLower.includes(area.toLowerCase())) {
+                    return district;
+                }
             }
         }
         
-        // Default charge for unrecognized areas
-        return 1500;
+        return null;
     };
 
+    // Format currency
+    const formatCurrency = (amount) => {
+        // Handle undefined, null, or NaN values
+        if (amount === undefined || amount === null || isNaN(amount)) {
+            return 'Rs. 0';
+        }
+        // Ensure amount is a number
+        const numAmount = Number(amount);
+        if (isNaN(numAmount)) {
+            return 'Rs. 0';
+        }
+        return `Rs. ${numAmount.toLocaleString()}`;
+    };
+
+    // Fetch user session on component mount
     useEffect(() => {
+        const fetchUserSession = async () => {
+            try {
+                const response = await axios.get('http://localhost/gearsphere_api/GearSphere-BackEnd/getSession.php', {
+                    withCredentials: true
+                });
+                
+                if (response.data.success === true) {
+                    setUserId(response.data.user_id);
+                } else {
+                    console.error('Session not found:', response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching user session:', error);
+            }
+        };
+
         fetchUserSession();
     }, []);
 
+    // Calculate delivery charge when address changes
     useEffect(() => {
-        if (userAddress && cartTotal > 0) {
-            calculateDelivery();
-        }
-    }, [userAddress, cartTotal]);
-
-    const fetchUserSession = async () => {
-        try {
-            const sessionResponse = await axios.get(
-                "http://localhost/gearsphere_api/GearSphere-BackEnd/getSession.php",
-                { withCredentials: true }
-            );
-            if (sessionResponse.data.success) {
-                setUserId(sessionResponse.data.user_id);
-                fetchUserAddress();
+        if (userAddress) {
+            const district = getDistrictFromAddress(userAddress);
+            if (district) {
+                setDeliveryCharge(district.charge);
+                // Safely call onDeliveryUpdate if it exists
+                if (onDeliveryUpdate && typeof onDeliveryUpdate === 'function') {
+                    onDeliveryUpdate({
+                        deliveryCharge: district.charge,
+                        address: userAddress
+                    });
+                }
+            } else {
+                // Default delivery charge for unknown areas
+                setDeliveryCharge(1000);
+                if (onDeliveryUpdate && typeof onDeliveryUpdate === 'function') {
+                    onDeliveryUpdate({
+                        deliveryCharge: 1000,
+                        address: userAddress
+                    });
+                }
             }
-        } catch (error) {
-            console.error('Error fetching session:', error);
-        }
-    };
-
-    const fetchUserAddress = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`http://localhost/gearsphere_api/GearSphere-BackEnd/getCustomer.php`, {
-                withCredentials: true
-            });
-            // Original getCustomer.php returns the user data directly
-            if (response.data) {
-                setUserAddress(response.data.address || '');
-                setUserId(response.data.user_id || response.data.id || null);
+        } else {
+            setDeliveryCharge(0);
+            if (onDeliveryUpdate && typeof onDeliveryUpdate === 'function') {
+                onDeliveryUpdate({
+                    deliveryCharge: 0,
+                    address: ''
+                });
             }
+        }
+    }, [userAddress, onDeliveryUpdate]);
+
+    // Handle address update
+    const handleAddressUpdate = async () => {
+        if (!selectedDistrict || !newAddress.trim()) {
+            toast.error('Please fill in all required fields');
+            return;
+        }
+
+        if (!userId) {
+            toast.error('User session not found');
+            return;
+        }
+
+        setLoading(true);
+        
+        try {
+            const fullAddress = `${newAddress.trim()}, ${selectedDistrict}`;
+
+            // Set the delivery address for this order (no API call needed for user profile update)
+            setUserAddress(fullAddress);
+            setShowAddressForm(false);
+            setNewAddress('');
+            setSelectedDistrict('');
+            toast.success('Delivery address set successfully!');
+            
         } catch (error) {
-            console.error('Error fetching user address:', error);
+            console.error('Error setting delivery address:', error);
+            toast.error('Failed to set delivery address. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleAddressUpdate = async () => {
-        if (!selectedDistrict || !newAddress.trim()) {
-            toast.error('Please fill in both district and address fields.');
-            return;
-        }
-
-        if (!userId) {
-            toast.error('User ID not found. Please refresh the page and try again.');
-            return;
-        }
-
-        try {
-            const fullAddress = `${newAddress.trim()}, ${selectedDistrict}`;
-            
-            // Send simple address-only update
-            const updateData = {
-                user_id: userId,
-                address: fullAddress
-            };
-            
-            const response = await axios.post(`http://localhost/gearsphere_api/GearSphere-BackEnd/updateCustomerProfile.php`, updateData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true
-            });
-
-            if (response.data.success) {
-                setUserAddress(fullAddress);
-                setNewAddress('');
-                setSelectedDistrict('');
-                
-                // Close the modal
-                setShowModal(false);
-                
-                // Recalculate delivery
-                calculateDelivery();
-                
-                toast.success('Address updated successfully!');
-            } else {
-                console.error('Update failed:', response.data);
-                toast.error(`Failed to update address: ${response.data.message || 'Unknown error'}`);
-            }
-        } catch (error) {
-            console.error('Error updating address:', error);
-            if (error.response) {
-                console.error('Error response:', error.response.data);
-                toast.error(`Error updating address: ${error.response.data.message || error.message}`);
-            } else {
-                toast.error('Network error. Please check your connection and try again.');
+    // Handle change address button click
+    const handleChangeAddress = () => {
+        if (userAddress) {
+            // Pre-populate form with existing address
+            const addressParts = userAddress.split(', ');
+            if (addressParts.length >= 2) {
+                const district = addressParts[addressParts.length - 1];
+                const address = addressParts.slice(0, -1).join(', ');
+                setSelectedDistrict(district);
+                setNewAddress(address);
             }
         }
+        setShowAddressForm(true);
     };
 
-    const calculateDelivery = () => {
-        if (!userAddress) {
-            setDeliveryCharge(0);
-            return;
-        }
-
-        const charge = getDeliveryCharge(userAddress);
-        
-        setDeliveryCharge(charge);
-        
-        onDeliveryUpdate && onDeliveryUpdate({
-            deliveryCharge: charge,
-            address: userAddress
-        });
-    };
-
-    const formatCurrency = (amount) => {
-        return `Rs. ${amount.toLocaleString()}`;
+    // Handle cancel form
+    const handleCancelForm = () => {
+        setNewAddress('');
+        setSelectedDistrict('');
+        setShowAddressForm(false);
     };
 
     if (loading) {
         return (
-            <div className="bg-white p-6 rounded-lg shadow-md border">
-                <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-2"></div>
-                    <span>Loading delivery information...</span>
+            <div className="bg-white p-4 rounded-3 shadow border w-100" style={{borderRadius: '15px', minWidth: '100%'}}>
+                <div className="text-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-2">Calculating delivery charge...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md border">
-            <h3 className="text-lg font-semibold mb-4 flex items-center">
+        <div className="bg-white p-4 rounded-3 shadow border w-100" style={{borderRadius: '15px', minWidth: '100%'}}>
+            <h3 className="h5 fw-bold mb-3 d-flex align-items-center text-dark">
                 🚚 Delivery Information
             </h3>
 
-            {!userAddress ? (
-                <div className="alert alert-warning">
-                    <p className="mb-2"><strong>⚠️ Address Required</strong></p>
-                    <p className="mb-3">Please update your address in profile to calculate delivery charges.</p>
+            {!userAddress && !showAddressForm ? (
+                <div className="alert alert-info">
+                    <p className="mb-2"><strong>📍 Set Delivery Address</strong></p>
+                    <p className="mb-3">Please set the delivery address for this order to calculate delivery charges.</p>
                     <button 
-                        onClick={() => window.location.href = '/customer/profile'}
-                        className="btn btn-warning"
+                        onClick={() => {
+                            setShowAddressForm(true);
+                            // Clear form fields for new address
+                            setNewAddress('');
+                            setSelectedDistrict('');
+                        }}
+                        className="btn btn-primary"
                     >
-                        Update Address
+                        Add Delivery Address
                     </button>
                 </div>
-            ) : (
-                <div className="space-y-4">
-                    {/* Address Display */}
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-sm text-gray-600 font-medium mb-1">📍 Delivery Address:</p>
-                        <p className="text-gray-800">{userAddress}</p>
-                        <button 
-                            type="button"
-                            className="btn btn-outline-primary btn-sm mt-2"
-                            onClick={() => setShowModal(true)}
-                        >
-                            Change Address
-                        </button>
+            ) : showAddressForm ? (
+                <div className="border rounded-3 p-4 bg-light w-100" style={{borderRadius: '12px'}}>
+                    <h5 className="mb-3 text-dark fw-medium">📍 Set Delivery Address</h5>
+                    <div className="alert alert-info mb-3 rounded-3">
+                        <small>
+                            <strong>Note:</strong> This delivery address will be used only for this order and won't update your profile address.
+                        </small>
                     </div>
-
-                    {/* Delivery Calculation */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
-                        <h4 className="font-semibold text-gray-800 mb-3">💰 Delivery Calculation</h4>
-                        
-                        <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">Cart Total:</span>
-                                <span className="font-medium">{formatCurrency(cartTotal)}</span>
-                            </div>
-                            
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">Delivery Charge:</span>
-                                <span className="font-medium text-blue-600">{formatCurrency(deliveryCharge)}</span>
-                            </div>
-                        </div>
-
-                        <div className="border-t border-gray-200 pt-3 mt-3">
-                            <div className="flex justify-between font-semibold text-lg">
-                                <span>Total with Delivery:</span>
-                                <span className="text-success">{formatCurrency(cartTotal + deliveryCharge)}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Refresh Button */}
-                    <button
-                        onClick={calculateDelivery}
-                        className="btn btn-primary w-100"
-                    >
-                        🔄 Recalculate Delivery
-                    </button>
-                </div>
-            )}
-
-            {/* Address Change Modal */}
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Change Delivery Address</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
-                            <Form.Label>District *</Form.Label>
+                            <Form.Label className="fw-medium">District *</Form.Label>
                             <Form.Select 
                                 value={selectedDistrict}
                                 onChange={(e) => setSelectedDistrict(e.target.value)}
                                 required
+                                style={{width: '100%'}}
                             >
                                 <option value="">Select District</option>
                                 <option value="Colombo">Colombo</option>
@@ -292,7 +257,6 @@ const DeliveryCalculator = ({ cartTotal, onDeliveryUpdate }) => {
                                 <option value="Ampara">Ampara</option>
                                 <option value="Trincomalee">Trincomalee</option>
                                 <option value="Kurunegala">Kurunegala</option>
-                                <option value="Puttalam">Puttalam</option>
                                 <option value="Anuradhapura">Anuradhapura</option>
                                 <option value="Polonnaruwa">Polonnaruwa</option>
                                 <option value="Badulla">Badulla</option>
@@ -301,28 +265,74 @@ const DeliveryCalculator = ({ cartTotal, onDeliveryUpdate }) => {
                                 <option value="Kegalle">Kegalle</option>
                             </Form.Select>
                         </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Full Address *</Form.Label>
+                        <Form.Group className="mb-4">
+                            <Form.Label className="fw-medium">Full Address *</Form.Label>
+                            <small className="text-muted d-block mb-2">
+                                Please enter your complete street address and city (without district)
+                            </small>
                             <Form.Control 
                                 as="textarea" 
                                 rows={3} 
-                                placeholder="Enter your complete address including house number, street, city, etc." 
+                                placeholder="Example: No. 123, Galle Road, Colombo 03 or Temple Road, Udaiyarkaddu" 
                                 value={newAddress}
                                 onChange={(e) => setNewAddress(e.target.value)}
                                 required
+                                style={{width: '100%', resize: 'vertical'}}
                             />
+                            <small className="text-muted">
+                                Include: House/Building number, Street name, City/Area
+                            </small>
                         </Form.Group>
+                        <div className="d-flex gap-2 mt-3">
+                            <Button variant="secondary" onClick={handleCancelForm} className="flex-fill">
+                                Cancel
+                            </Button>
+                            <Button variant="success" onClick={handleAddressUpdate} className="flex-fill">
+                                Set Delivery Address
+                            </Button>
+                        </div>
                     </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Cancel
-                    </Button>
-                    <Button variant="success" onClick={handleAddressUpdate}>
-                        Update Address
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                </div>
+            ) : (
+                <div>
+                    {/* Address Display */}
+                    <div className="bg-light p-4 rounded-3 border w-100 mb-3" style={{borderRadius: '12px'}}>
+                        <p className="small text-muted fw-medium mb-2">📍 Delivery Address:</p>
+                        <p className="text-dark fw-medium mb-3">{userAddress}</p>
+                        <button 
+                            type="button"
+                            className="btn btn-outline-primary btn-sm rounded-3"
+                            onClick={handleChangeAddress}
+                        >
+                            Change Delivery Address
+                        </button>
+                    </div>
+
+                    {/* Delivery Calculation */}
+                    <div className="bg-primary bg-opacity-10 p-4 rounded-3 border border-primary border-opacity-25 shadow-sm w-100" style={{borderRadius: '12px'}}>
+                        <h4 className="fw-bold text-dark mb-3">💰 Delivery Calculation</h4>
+                        
+                        <div className="mb-2">
+                            <div className="d-flex justify-content-between small">
+                                <span className="text-muted">Cart Total:</span>
+                                <span className="fw-medium">{formatCurrency(Number(cartTotal) || 0)}</span>
+                            </div>
+                            
+                            <div className="d-flex justify-content-between small">
+                                <span className="text-muted">Delivery Charge:</span>
+                                <span className="fw-medium text-primary">{formatCurrency(Number(deliveryCharge) || 0)}</span>
+                            </div>
+                        </div>
+
+                        <div className="border-top pt-2 mt-2">
+                            <div className="d-flex justify-content-between fw-bold">
+                                <span>Total with Delivery:</span>
+                                <span className="text-success">{formatCurrency((Number(cartTotal) || 0) + (Number(deliveryCharge) || 0))}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
