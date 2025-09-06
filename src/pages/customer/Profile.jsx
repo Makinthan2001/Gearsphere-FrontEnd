@@ -21,21 +21,12 @@ const CustomerProfile = () => {
     const fetchCustomerData = async () => {
       try {
         setIsLoading(true);
-        // Get user session from backend
-        const sessionResponse = await axios.get(
-          "http://localhost/gearsphere_api/GearSphere-BackEnd/getSession.php",
-          { withCredentials: true }
-        );
-
-        if (!sessionResponse.data.success) {
-          return toast.error("Session expired. Please log in.");
-        }
-
-        const userId = sessionResponse.data.user_id;
+        
+        // Get customer data directly (getCustomer.php handles session validation)
         const response = await axios.get(
-          `http://localhost/gearsphere_api/GearSphere-Backend/getCustomer.php?user_id=${userId}`,
+          "http://localhost/gearsphere_api/GearSphere-BackEnd/getCustomer.php",
           { withCredentials: true }
-        );
+        );     
         const data = response.data;
 
         if (data) {
@@ -56,7 +47,11 @@ const CustomerProfile = () => {
         }
       } catch (err) {
         console.error("Fetch failed:", err);
-        toast.error("Failed to fetch profile");
+        if (err.response && err.response.status === 401) {
+          toast.error("Session expired. Please log in.");
+        } else {
+          toast.error("Failed to fetch profile");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -113,7 +108,7 @@ const CustomerProfile = () => {
         toast.success("Profile updated successfully");
 
         const profileRes = await axios.get(
-          `http://localhost/gearsphere_api/GearSphere-Backend/getCustomer.php?user_id=${userId}`,
+          `http://localhost/gearsphere_api/GearSphere-BackEnd/getCustomer.php`,
           { withCredentials: true }
         );
         const data = profileRes.data;
@@ -171,15 +166,15 @@ const CustomerProfile = () => {
                     objectFit: "cover",
                   }}
                 />
-                <h5>{formData.name}</h5>
+                <h5>{formData.name || "Name not set"}</h5>
                 <p>
                   <b>Email:</b> {formData.email}
                 </p>
                 <p>
-                  <b>Contact:</b> {formData.contact_number}
+                  <b>Contact:</b> {formData.contact_number || "Contact not set"}
                 </p>
                 <p>
-                  <b>Address:</b> {formData.address}
+                  <b>Address:</b> {formData.address || "Address not set"}
                 </p>
               </Card.Body>
             </Card>
@@ -211,7 +206,7 @@ const CustomerProfile = () => {
                   Change Photo
                 </Button>
               </div>
-              <h5 className="mt-3">{formData.name}</h5>
+              <h5 className="mt-3">{formData.name || "User Name"}</h5>
               <p className="text-muted">Customer</p>
             </div>
 
@@ -223,6 +218,7 @@ const CustomerProfile = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
+                  placeholder="Enter your full name"
                   autoComplete="name"
                 />
               </Form.Group>
