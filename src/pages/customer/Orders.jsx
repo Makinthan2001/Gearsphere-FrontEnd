@@ -135,6 +135,7 @@ const Orders = () => {
                   <th>Order ID</th>
                   <th>Date</th>
                   <th>Order Status</th>
+                  <th>Delivery Address</th>
                   <th>Total</th>
                   <th>Actions</th>
                   <th>Request Status</th>
@@ -146,6 +147,17 @@ const Orders = () => {
                     <td>{order.order_id}</td>
                     <td>{order.date}</td>
                     <td>{getStatusBadge(order.orderStatus)}</td>
+                    <td>
+                      <span title={order.deliveryAddress}>
+                        {order.deliveryAddress ? 
+                          (order.deliveryAddress.length > 30 ? 
+                            order.deliveryAddress.substring(0, 30) + '...' : 
+                            order.deliveryAddress
+                          ) : 
+                          'Not specified'
+                        }
+                      </span>
+                    </td>
                     <td>{formatLKR(order.total)}</td>
                     <td>
                       <Button
