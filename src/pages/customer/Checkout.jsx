@@ -19,6 +19,7 @@ import {
 import { CartContext } from "./CartContext";
 import { OrdersContext } from "./OrdersContext";
 import { useNavigate } from "react-router-dom";
+import DeliveryCalculator from "./DeliveryCalculator";
 
 const Checkout = ({
   show,
@@ -40,6 +41,10 @@ const Checkout = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const [userAddress, setUserAddress] = useState("");
+  const [userId, setUserId] = useState(null);
+  const [deliveryCharge, setDeliveryCharge] = useState(0);
+  const [deliveryAddress, setDeliveryAddress] = useState("");
 
   // Reset states when modal is closed
   const handleClose = () => {
@@ -58,8 +63,37 @@ const Checkout = ({
     if (show) {
       setShowSuccess(false);
       setIsProcessing(false);
+      fetchUserData();
     }
   }, [show]);
+
+  // Fetch user data to get address for delivery calculation
+  const fetchUserData = async () => {
+    try {
+      const sessionResponse = await axios.get(
+        "http://localhost/gearsphere_api/GearSphere-BackEnd/getSession.php",
+        { withCredentials: true }
+      );
+
+      if (sessionResponse.data.success) {
+        const userIdFromSession = sessionResponse.data.user_id;
+        setUserId(userIdFromSession);
+        
+        const userResponse = await axios.get(
+          `http://localhost/gearsphere_api/GearSphere-BackEnd/getCustomer.php?user_id=${userIdFromSession}`,
+          { withCredentials: true }
+        );
+
+        if (userResponse.data.success && userResponse.data.customer) {
+          const address = userResponse.data.customer.address || "";
+          setUserAddress(address);
+          setDeliveryAddress(address); // Default delivery address to user's address
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   // Use custom order data if provided, otherwise use cart data
   const orderItems =
@@ -72,7 +106,8 @@ const Checkout = ({
       quantity: item.quantity,
     }));
 
-  const orderTotal = customOrderTotal || getCartTotal();
+  const baseOrderTotal = customOrderTotal || getCartTotal();
+  const orderTotal = baseOrderTotal + deliveryCharge;
   const orderType = customOrderType || "Cart Order";
 
   const formatLKR = (amount) => "LKR " + Number(amount).toLocaleString("en-LK");
@@ -288,6 +323,7 @@ const Checkout = ({
           })),
           total_amount: orderTotal,
           payment_method: paymentMethod.toUpperCase(),
+          delivery_charge: deliveryCharge,
         };
 
         const response = await fetch(
@@ -536,6 +572,21 @@ const Checkout = ({
                   </span>
                 </div>
               ))}
+              <hr />
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <span>Subtotal:</span>
+                <span>{formatLKR(baseOrderTotal)}</span>
+              </div>
+              
+              {/* Delivery Calculator */}
+              <DeliveryCalculator
+                cartTotal={baseOrderTotal}
+                onDeliveryUpdate={(deliveryInfo) => {
+                  setDeliveryCharge(deliveryInfo.deliveryCharge);
+                  setDeliveryAddress(deliveryInfo.address);
+                }}
+              />
+              
               <hr />
               <div className="d-flex justify-content-between align-items-center">
                 <h6 className="mb-0">Total:</h6>
