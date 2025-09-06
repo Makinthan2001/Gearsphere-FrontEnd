@@ -12,10 +12,20 @@ const CustomerProfile = () => {
     address: "",
     profilePic: "/profile_images/user_image.jpg",
   });
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [addressWithoutDistrict, setAddressWithoutDistrict] = useState("");
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef();
+
+  // Sri Lankan districts
+  const districts = [
+    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
+    'Galle', 'Matara', 'Hambantota', 'Kurunegala', 'Anuradhapura', 'Polonnaruwa',
+    'Ratnapura', 'Kegalle', 'Badulla', 'Monaragala', 'Ampara', 'Batticaloa',
+    'Trincomalee', 'Jaffna', 'Mannar', 'Vavuniya', 'Kilinochchi', 'Mullaitivu'
+  ];
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -34,6 +44,25 @@ const CustomerProfile = () => {
             ? `http://localhost/gearsphere_api/GearSphere-BackEnd/profile_images/${data.profile_image}`
             : "/profile_images/user_image.jpg";
 
+          // Parse address to extract district and address parts
+          let district = "";
+          let addressPart = "";
+          
+          if (data.address) {
+            console.log("Customer address:", data.address);
+            const addressParts = data.address.split(', ');
+            console.log("Address parts:", addressParts);
+            if (addressParts.length >= 2) {
+              district = addressParts[addressParts.length - 1]; // Last part is district
+              addressPart = addressParts.slice(0, -1).join(', '); // Everything except last part
+              console.log("Parsed district:", district);
+              console.log("Parsed address part:", addressPart);
+            } else {
+              addressPart = data.address; // If no comma, treat as address without district
+              console.log("No comma found, treating as address without district");
+            }
+          }
+
           setFormData({
             name: data.name || "",
             contact_number: data.contact_number || "",
@@ -41,6 +70,9 @@ const CustomerProfile = () => {
             email: data.email || "",
             profilePic: profilePicUrl,
           });
+
+          setSelectedDistrict(district);
+          setAddressWithoutDistrict(addressPart);
 
           // Store in sessionStorage for navbar updates (can be replaced with context/state management)
           window.dispatchEvent(new Event("profilePicUpdated"));
@@ -63,6 +95,30 @@ const CustomerProfile = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleDistrictChange = (e) => {
+    const district = e.target.value;
+    setSelectedDistrict(district);
+    
+    // Update the combined address in formData
+    const fullAddress = addressWithoutDistrict && district 
+      ? `${addressWithoutDistrict}, ${district}` 
+      : addressWithoutDistrict || district;
+    
+    setFormData((prev) => ({ ...prev, address: fullAddress }));
+  };
+
+  const handleAddressChange = (e) => {
+    const address = e.target.value;
+    setAddressWithoutDistrict(address);
+    
+    // Update the combined address in formData
+    const fullAddress = address && selectedDistrict 
+      ? `${address}, ${selectedDistrict}` 
+      : address || selectedDistrict;
+    
+    setFormData((prev) => ({ ...prev, address: fullAddress }));
   };
 
   const handleProfilePicChange = (e) => {
@@ -238,14 +294,31 @@ const CustomerProfile = () => {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>Address</Form.Label>
+                <Form.Label>District *</Form.Label>
+                <Form.Select
+                  value={selectedDistrict}
+                  onChange={handleDistrictChange}
+                  required
+                >
+                  <option value="">Select District</option>
+                  {districts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Full Address *</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Point Pedro | Jaffna"
+                  as="textarea"
+                  rows={3}
+                  value={addressWithoutDistrict}
+                  onChange={handleAddressChange}
+                  placeholder="Enter your complete address (house number, street, city, etc.)"
                   autoComplete="street-address"
+                  required
                 />
               </Form.Group>
 
