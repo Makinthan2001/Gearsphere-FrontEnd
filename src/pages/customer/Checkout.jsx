@@ -19,6 +19,7 @@ import {
 import { CartContext } from "./CartContext";
 import { OrdersContext } from "./OrdersContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import DeliveryCalculator from "./DeliveryCalculator";
 
 const Checkout = ({
@@ -107,10 +108,20 @@ const Checkout = ({
     }));
 
   const baseOrderTotal = customOrderTotal || getCartTotal();
-  const orderTotal = baseOrderTotal + deliveryCharge;
+  const orderTotal = (Number(baseOrderTotal) || 0) + (Number(deliveryCharge) || 0);
   const orderType = customOrderType || "Cart Order";
 
-  const formatLKR = (amount) => "LKR " + Number(amount).toLocaleString("en-LK");
+  const formatLKR = (amount) => {
+    // Handle undefined, null, or NaN values
+    if (amount === undefined || amount === null || isNaN(amount)) {
+      return "LKR 0";
+    }
+    const numAmount = Number(amount);
+    if (isNaN(numAmount)) {
+      return "LKR 0";
+    }
+    return "LKR " + numAmount.toLocaleString("en-LK");
+  };
 
   // Enhanced cardholder name validation
   const validateCardholderName = (name) => {
@@ -263,6 +274,12 @@ const Checkout = ({
   const validateForm = () => {
     const newErrors = {};
 
+    // Validate delivery address first - this is required
+    if (!deliveryAddress || deliveryAddress.trim() === '') {
+      newErrors.deliveryAddress = 'Delivery address is required to complete your order.';
+      toast.error('Please set a delivery address before proceeding with payment.');
+    }
+
     const cardNumberError = validateCardNumber(cardNumber);
     if (cardNumberError) {
       newErrors.cardNumber = cardNumberError;
@@ -324,6 +341,7 @@ const Checkout = ({
           total_amount: orderTotal,
           payment_method: paymentMethod.toUpperCase(),
           delivery_charge: deliveryCharge,
+          delivery_address: deliveryAddress,
         };
 
         const response = await fetch(
@@ -548,7 +566,7 @@ const Checkout = ({
   }
 
   return (
-    <Modal show={show} onHide={handleClose} size="lg" centered>
+    <Modal show={show} onHide={handleClose} size="xl" centered>
       <Modal.Header closeButton>
         <Modal.Title>Checkout</Modal.Title>
       </Modal.Header>
@@ -586,6 +604,15 @@ const Checkout = ({
                   setDeliveryAddress(deliveryInfo.address);
                 }}
               />
+              
+              {/* Delivery Address Required Warning */}
+              {(!deliveryAddress || deliveryAddress.trim() === '') && (
+                <Alert variant="warning" className="mt-3 mb-0">
+                  <small>
+                    <strong>⚠️ Delivery address required:</strong> Please set your delivery address above to proceed with payment.
+                  </small>
+                </Alert>
+              )}
               
               <hr />
               <div className="d-flex justify-content-between align-items-center">
@@ -761,7 +788,7 @@ const Checkout = ({
                   type="submit"
                   variant="success"
                   size="lg"
-                  disabled={isProcessing}
+                  disabled={isProcessing || !deliveryAddress || deliveryAddress.trim() === ''}
                   className="d-flex align-items-center justify-content-center"
                 >
                   {isProcessing ? (
@@ -772,6 +799,11 @@ const Checkout = ({
                         aria-hidden="true"
                       ></span>
                       Processing Payment...
+                    </>
+                  ) : (!deliveryAddress || deliveryAddress.trim() === '') ? (
+                    <>
+                      <Shield className="me-2" size={18} />
+                      Set Delivery Address to Pay
                     </>
                   ) : (
                     <>
