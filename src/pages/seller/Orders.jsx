@@ -75,6 +75,8 @@ const SellerOrders = () => {
               trackingNumber: order.trackingNumber || "",
               notes: order.notes || "",
               shippingAddress: order.customer.address || "",
+              deliveryCharge: order.delivery_charge || 0,
+              deliveryAddress: order.delivery_address || order.customer.address,
             }))
           );
         }
@@ -360,37 +362,35 @@ const SellerOrders = () => {
               <Row className="mb-4">
                 <Col md={6}>
                   <h5>Order Information</h5>
-                  <p>
+                  <p className="mb-1">
                     <strong>Order ID:</strong> {selectedOrder.id}
                   </p>
-                  <p>
+                  <p className="mb-1">
                     <strong>Date:</strong> {selectedOrder.date}
                   </p>
-                  <p>
+                  <p className="mb-1">
                     <strong>Status:</strong>{" "}
                     {getStatusBadge(selectedOrder.status)}
                   </p>
-                  <p>
-                    <strong>Total:</strong> {formatLKR(selectedOrder.total)}
-                  </p>
-                  <p>
+                  <p className="mb-1">
                     <strong>Payment Method:</strong>{" "}
                     {selectedOrder.paymentMethod}
                   </p>
                 </Col>
                 <Col md={6}>
                   <h5>Customer Information</h5>
-                  <p>
+                  <p className="mb-1">
                     <strong>Name:</strong> {selectedOrder.customer.name}
                   </p>
-                  <p>
+                  <p className="mb-1">
                     <strong>Email:</strong> {selectedOrder.customer.email}
                   </p>
-                  <p>
+                  <p className="mb-1">
                     <strong>Phone:</strong> {selectedOrder.customer.phone}
                   </p>
-                  <h5 className="mt-3">Shipping Address</h5>
-                  <p>{selectedOrder.customer.address}</p>
+                  <p className="mb-1">
+                    <strong>Delivery Address:</strong> {selectedOrder.deliveryAddress}
+                  </p>
                 </Col>
               </Row>
               <h5>Order Items</h5>
@@ -398,6 +398,7 @@ const SellerOrders = () => {
                 <thead>
                   <tr>
                     <th>Product</th>
+                    <th>Category</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Subtotal</th>
@@ -407,12 +408,40 @@ const SellerOrders = () => {
                   {selectedOrder.items.map((item) => (
                     <tr key={item.id}>
                       <td>{item.name}</td>
+                      <td>{item.category}</td>
                       <td>{item.quantity}</td>
                       <td>{formatLKR(item.price)}</td>
                       <td>{formatLKR(item.quantity * item.price)}</td>
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr className="border-top">
+                    <td colSpan="5" className="py-4">
+                      <div className="bg-light p-4 rounded shadow-sm">
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2">
+                          <span className="text-muted fs-6">Items Subtotal:</span>
+                          <span className="fw-semibold fs-6">
+                            {formatLKR(selectedOrder.items.reduce((sum, item) => sum + (item.quantity * item.price), 0))}
+                          </span>
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2">
+                          <span className="text-muted fs-6">Delivery Charge:</span>
+                          <span className="fw-semibold fs-6 text-primary">
+                            {formatLKR(selectedOrder.deliveryCharge)}
+                          </span>
+                        </div>
+                        <hr className="my-3" />
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span className="fs-5 fw-bold text-dark">Total:</span>
+                          <span className="fs-5 fw-bold text-success">
+                            {formatLKR(selectedOrder.total)}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
               {selectedOrder.notes && (
                 <div className="mt-3">
