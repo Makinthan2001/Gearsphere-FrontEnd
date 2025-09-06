@@ -270,6 +270,7 @@ const SellerOrders = () => {
                 <th>Order ID</th>
                 <th>Customer</th>
                 <th>Date</th>
+                <th>Delivery Address</th>
                 <th>Total</th>
                 <th>Status</th>
                 <th>Payment Method</th>
@@ -285,6 +286,17 @@ const SellerOrders = () => {
                     <small className="text-muted">{order.customer.email}</small>
                   </td>
                   <td>{order.date}</td>
+                  <td>
+                    <span title={order.deliveryAddress}>
+                      {order.deliveryAddress ? 
+                        (order.deliveryAddress.length > 25 ? 
+                          order.deliveryAddress.substring(0, 25) + '...' : 
+                          order.deliveryAddress
+                        ) : 
+                        'Not specified'
+                      }
+                    </span>
+                  </td>
                   <td>{formatLKR(order.total)}</td>
                   <td>{getStatusBadge(order.status)}</td>
                   <td>{order.paymentMethod}</td>
