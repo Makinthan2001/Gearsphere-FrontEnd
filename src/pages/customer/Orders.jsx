@@ -225,7 +225,7 @@ const Orders = () => {
           {selectedOrder && (
             <>
               <Row className="mb-4">
-                <Col md={6}>
+                <Col md={12}>
                   <h5>Order Information</h5>
                   <p className="mb-1">
                     <strong>Order ID:</strong> {selectedOrder.order_id}
@@ -233,19 +233,29 @@ const Orders = () => {
                   <p className="mb-1">
                     <strong>Date:</strong> {selectedOrder.date}
                   </p>
-
+                  <p className="mb-1">
+                    <strong>Status:</strong>{" "}
+                    {getStatusBadge(selectedOrder.orderStatus)}
+                  </p>
                   <p className="mb-1">
                     <strong>Payment Status:</strong>{" "}
                     <Badge bg="success">{selectedOrder.paymentStatus}</Badge>
                   </p>
-                  <p className="mb-1">
-                    <strong>Total:</strong> {formatLKR(selectedOrder.total)}
-                  </p>
                 </Col>
-                <Col md={6}>
+              </Row>
+              
+              <Row className="mb-4">
+                <Col md={12}>
+                  <h5>Order Summary</h5>
+                  <p className="text-muted mb-0">Full order breakdown is displayed below the items table.</p>
+                </Col>
+              </Row>
+              
+              <Row className="mb-4">
+                <Col md={12}>
                   <h5>Shipping Information</h5>
                   <p className="mb-1">
-                    <strong>Address:</strong> {selectedOrder.shippingAddress}
+                    <strong>Delivery Address:</strong> {selectedOrder.deliveryAddress}
                   </p>
                   <p className="mb-1">
                     <strong>Phone Number:</strong> {selectedOrder.phoneNumber}
@@ -293,12 +303,29 @@ const Orders = () => {
                   ))}
                 </tbody>
                 <tfoot>
-                  <tr>
-                    <td colSpan="5" className="text-end">
-                      <strong>Total:</strong>
-                    </td>
-                    <td>
-                      <strong>{formatLKR(selectedOrder.total)}</strong>
+                  <tr className="border-top">
+                    <td colSpan="6" className="py-4">
+                      <div className="bg-light p-4 rounded shadow-sm">
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2">
+                          <span className="text-muted fs-6">Items Subtotal:</span>
+                          <span className="fw-semibold fs-6">
+                            {formatLKR(selectedOrder.items.reduce((sum, item) => sum + (item.quantity * item.price), 0))}
+                          </span>
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2">
+                          <span className="text-muted fs-6">Delivery Charge:</span>
+                          <span className="fw-semibold fs-6 text-primary">
+                            {formatLKR(selectedOrder.deliveryCharge)}
+                          </span>
+                        </div>
+                        <hr className="my-3" />
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span className="fs-5 fw-bold text-dark">Total:</span>
+                          <span className="fs-5 fw-bold text-success">
+                            {formatLKR(selectedOrder.total)}
+                          </span>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 </tfoot>
