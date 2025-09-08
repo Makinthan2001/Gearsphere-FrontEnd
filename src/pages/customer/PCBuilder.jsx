@@ -233,16 +233,13 @@ function PCBuilder() {
             if (correctSlot === slot) {
               cleaned[slot] = component;
             } else {
-              console.warn(
-                `Removing misplaced component: ${component.name} (${component.category}) was in ${slot} slot, should be in ${correctSlot} slot`
-              );
+              // Component is in wrong slot, skip it
             }
           }
         });
 
         return cleaned;
       } catch (e) {
-        console.error("Error parsing saved components, resetting:", e);
         return {
           cpu: null,
           gpu: null,
@@ -1001,7 +998,7 @@ function PCBuilder() {
   }, [location]);
 
   useEffect(() => {
-    console.log("Selected components:", selectedComponents);
+    // Component selection tracking
   }, [selectedComponents]);
 
   // Handle incoming selected components from navigation state
@@ -1010,8 +1007,6 @@ function PCBuilder() {
     if (selectedComponent) {
       // Determine component type based on the component's category ONLY - most reliable
       let componentType = null;
-
-      console.log("Detecting component type for:", selectedComponent);
 
       // Use category as the primary and most reliable detection method
       switch (selectedComponent.category) {
@@ -1051,15 +1046,10 @@ function PCBuilder() {
           componentType = "operating_system";
           break;
         default:
-          console.error("Unknown category:", selectedComponent.category);
           componentType = null;
       }
 
       if (componentType) {
-        console.log(
-          `Setting component of type ${componentType} based on category ${selectedComponent.category}:`,
-          selectedComponent
-        );
         setSelectedComponents((prev) => ({
           ...prev,
           [componentType]: selectedComponent,
@@ -1068,10 +1058,7 @@ function PCBuilder() {
         // Clear the navigation state to prevent re-processing
         navigate(location.pathname, { replace: true, state: {} });
       } else {
-        console.error(
-          "Could not determine component type for category:",
-          selectedComponent.category
-        );
+        // Could not determine component type
       }
     }
   }, [location.state, navigate, location.pathname]);
