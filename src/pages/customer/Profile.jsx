@@ -21,22 +21,42 @@ const CustomerProfile = () => {
 
   // Sri Lankan districts
   const districts = [
-    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
-    'Galle', 'Matara', 'Hambantota', 'Kurunegala', 'Anuradhapura', 'Polonnaruwa',
-    'Ratnapura', 'Kegalle', 'Badulla', 'Monaragala', 'Ampara', 'Batticaloa',
-    'Trincomalee', 'Jaffna', 'Mannar', 'Vavuniya', 'Kilinochchi', 'Mullaitivu'
+    "Colombo",
+    "Gampaha",
+    "Kalutara",
+    "Kandy",
+    "Matale",
+    "Nuwara Eliya",
+    "Galle",
+    "Matara",
+    "Hambantota",
+    "Kurunegala",
+    "Anuradhapura",
+    "Polonnaruwa",
+    "Ratnapura",
+    "Kegalle",
+    "Badulla",
+    "Monaragala",
+    "Ampara",
+    "Batticaloa",
+    "Trincomalee",
+    "Jaffna",
+    "Mannar",
+    "Vavuniya",
+    "Kilinochchi",
+    "Mullaitivu",
   ];
 
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
         setIsLoading(true);
-        
+
         // Get customer data directly (getCustomer.php handles session validation)
         const response = await axios.get(
           "http://localhost/gearsphere_api/GearSphere-BackEnd/getCustomer.php",
           { withCredentials: true }
-        );     
+        );
         const data = response.data;
 
         if (data) {
@@ -47,19 +67,14 @@ const CustomerProfile = () => {
           // Parse address to extract district and address parts
           let district = "";
           let addressPart = "";
-          
+
           if (data.address) {
-            console.log("Customer address:", data.address);
-            const addressParts = data.address.split(', ');
-            console.log("Address parts:", addressParts);
+            const addressParts = data.address.split(", ");
             if (addressParts.length >= 2) {
               district = addressParts[addressParts.length - 1]; // Last part is district
-              addressPart = addressParts.slice(0, -1).join(', '); // Everything except last part
-              console.log("Parsed district:", district);
-              console.log("Parsed address part:", addressPart);
+              addressPart = addressParts.slice(0, -1).join(", "); // Everything except last part
             } else {
               addressPart = data.address; // If no comma, treat as address without district
-              console.log("No comma found, treating as address without district");
             }
           }
 
@@ -78,7 +93,6 @@ const CustomerProfile = () => {
           window.dispatchEvent(new Event("profilePicUpdated"));
         }
       } catch (err) {
-        console.error("Fetch failed:", err);
         if (err.response && err.response.status === 401) {
           toast.error("Session expired. Please log in.");
         } else {
@@ -100,24 +114,26 @@ const CustomerProfile = () => {
   const handleDistrictChange = (e) => {
     const district = e.target.value;
     setSelectedDistrict(district);
-    
+
     // Update the combined address in formData
-    const fullAddress = addressWithoutDistrict && district 
-      ? `${addressWithoutDistrict}, ${district}` 
-      : addressWithoutDistrict || district;
-    
+    const fullAddress =
+      addressWithoutDistrict && district
+        ? `${addressWithoutDistrict}, ${district}`
+        : addressWithoutDistrict || district;
+
     setFormData((prev) => ({ ...prev, address: fullAddress }));
   };
 
   const handleAddressChange = (e) => {
     const address = e.target.value;
     setAddressWithoutDistrict(address);
-    
+
     // Update the combined address in formData
-    const fullAddress = address && selectedDistrict 
-      ? `${address}, ${selectedDistrict}` 
-      : address || selectedDistrict;
-    
+    const fullAddress =
+      address && selectedDistrict
+        ? `${address}, ${selectedDistrict}`
+        : address || selectedDistrict;
+
     setFormData((prev) => ({ ...prev, address: fullAddress }));
   };
 
@@ -185,7 +201,6 @@ const CustomerProfile = () => {
         );
       }
     } catch (err) {
-      console.error("Update error:", err);
       toast.error("An error occurred during update");
     }
   };
