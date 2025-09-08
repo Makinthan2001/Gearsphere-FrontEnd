@@ -58,7 +58,7 @@ export const CartProvider = ({ children }) => {
       }
       // Only log non-auth errors to avoid console spam for guest users
       if (error.response?.status !== 401) {
-        console.error("Failed to fetch cart:", error);
+        // Failed to fetch cart for authenticated user
       }
       setCartItems([]);
     } finally {
@@ -96,8 +96,7 @@ export const CartProvider = ({ children }) => {
       );
       await fetchCart(); // Refetch cart to update state with the latest data
     } catch (error) {
-      console.error("Failed to add to cart:", error);
-      // Optionally show an error toast to the user
+      // Failed to add to cart
     }
   };
 
@@ -122,7 +121,7 @@ export const CartProvider = ({ children }) => {
       );
       await fetchCart();
     } catch (error) {
-      console.error("Failed to remove from cart:", error);
+      // Failed to remove from cart
     }
   };
 
@@ -148,7 +147,7 @@ export const CartProvider = ({ children }) => {
       );
       await fetchCart();
     } catch (error) {
-      console.error("Failed to update quantity:", error);
+      // Failed to update quantity
     }
   };
 
@@ -170,7 +169,7 @@ export const CartProvider = ({ children }) => {
       );
       setCartItems([]); // Optimistic update for immediate UI feedback
     } catch (error) {
-      console.error("Failed to clear cart:", error);
+      // Failed to clear cart
     }
   };
 

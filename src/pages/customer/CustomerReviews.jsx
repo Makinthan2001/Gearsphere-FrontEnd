@@ -57,7 +57,6 @@ export default function CustomerReviews() {
         const reviewsJson = await reviewsRes.json();
         setReviews(Array.isArray(reviewsJson) ? reviewsJson : []);
       } catch (e) {
-        console.error(e);
         setAlert({ type: "danger", msg: "Failed to load data from server." });
         setTechnicians([]);
         setReviews([]);
@@ -116,7 +115,6 @@ export default function CustomerReviews() {
         });
       }
     } catch (e) {
-      console.error(e);
       setAlert({ type: "danger", msg: "Error submitting review" });
     }
   };
