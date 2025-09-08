@@ -124,7 +124,7 @@ export default function CompareGPUPage() {
         try {
           compareSelection = JSON.parse(storedSelection);
         } catch (e) {
-          console.warn("Failed to parse stored comparison selection:", e);
+          // Invalid JSON in storage, ignore
         }
       }
     } else {
@@ -139,7 +139,6 @@ export default function CompareGPUPage() {
       try {
         setGpus(compareSelection);
       } catch (error) {
-        console.error("Error parsing GPU data:", error);
         toast.error("Error loading GPU comparison data");
       }
     }

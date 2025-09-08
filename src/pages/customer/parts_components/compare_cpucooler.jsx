@@ -169,7 +169,6 @@ export default function CompareCPUCoolerPage() {
           }
         }
       } catch (error) {
-        console.error("Error fetching CPU coolers:", error);
         toast.error("Error loading CPU cooler data");
       } finally {
         setLoading(false);
