@@ -79,7 +79,7 @@ const Checkout = ({
       if (sessionResponse.data.success) {
         const userIdFromSession = sessionResponse.data.user_id;
         setUserId(userIdFromSession);
-        
+
         const userResponse = await axios.get(
           `http://localhost/gearsphere_api/GearSphere-BackEnd/getCustomer.php?user_id=${userIdFromSession}`,
           { withCredentials: true }
@@ -92,7 +92,7 @@ const Checkout = ({
         }
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      toast.error("Failed to load user information");
     }
   };
 
@@ -108,7 +108,8 @@ const Checkout = ({
     }));
 
   const baseOrderTotal = customOrderTotal || getCartTotal();
-  const orderTotal = (Number(baseOrderTotal) || 0) + (Number(deliveryCharge) || 0);
+  const orderTotal =
+    (Number(baseOrderTotal) || 0) + (Number(deliveryCharge) || 0);
   const orderType = customOrderType || "Cart Order";
 
   const formatLKR = (amount) => {
@@ -275,9 +276,12 @@ const Checkout = ({
     const newErrors = {};
 
     // Validate delivery address first - this is required
-    if (!deliveryAddress || deliveryAddress.trim() === '') {
-      newErrors.deliveryAddress = 'Delivery address is required to complete your order.';
-      toast.error('Please set a delivery address before proceeding with payment.');
+    if (!deliveryAddress || deliveryAddress.trim() === "") {
+      newErrors.deliveryAddress =
+        "Delivery address is required to complete your order.";
+      toast.error(
+        "Please set a delivery address before proceeding with payment."
+      );
     }
 
     const cardNumberError = validateCardNumber(cardNumber);
@@ -385,7 +389,6 @@ const Checkout = ({
           setIsProcessing(false);
         }
       } catch (err) {
-        console.error("Order submission error:", err);
         alert("A network or server error occurred. Please try again later.");
         setIsProcessing(false);
       }
@@ -595,7 +598,7 @@ const Checkout = ({
                 <span>Subtotal:</span>
                 <span>{formatLKR(baseOrderTotal)}</span>
               </div>
-              
+
               {/* Delivery Calculator */}
               <DeliveryCalculator
                 cartTotal={baseOrderTotal}
@@ -604,16 +607,17 @@ const Checkout = ({
                   setDeliveryAddress(deliveryInfo.address);
                 }}
               />
-              
+
               {/* Delivery Address Required Warning */}
-              {(!deliveryAddress || deliveryAddress.trim() === '') && (
+              {(!deliveryAddress || deliveryAddress.trim() === "") && (
                 <Alert variant="warning" className="mt-3 mb-0">
                   <small>
-                    <strong>⚠️ Delivery address required:</strong> Please set your delivery address above to proceed with payment.
+                    <strong>⚠️ Delivery address required:</strong> Please set
+                    your delivery address above to proceed with payment.
                   </small>
                 </Alert>
               )}
-              
+
               <hr />
               <div className="d-flex justify-content-between align-items-center">
                 <h6 className="mb-0">Total:</h6>
@@ -775,11 +779,15 @@ const Checkout = ({
                 </Col>
               </Row>
 
-              <Alert variant="success" className="mb-3 d-flex align-items-center">
+              <Alert
+                variant="success"
+                className="mb-3 d-flex align-items-center"
+              >
                 <CheckCircle className="me-2 flex-shrink-0" size={20} />
                 <small>
-                  <strong>256-bit SSL Encryption:</strong> Your payment information is
-                  encrypted and secure. We never store your card details.
+                  <strong>256-bit SSL Encryption:</strong> Your payment
+                  information is encrypted and secure. We never store your card
+                  details.
                 </small>
               </Alert>
 
@@ -788,7 +796,11 @@ const Checkout = ({
                   type="submit"
                   variant="success"
                   size="lg"
-                  disabled={isProcessing || !deliveryAddress || deliveryAddress.trim() === ''}
+                  disabled={
+                    isProcessing ||
+                    !deliveryAddress ||
+                    deliveryAddress.trim() === ""
+                  }
                   className="d-flex align-items-center justify-content-center"
                 >
                   {isProcessing ? (
@@ -800,7 +812,7 @@ const Checkout = ({
                       ></span>
                       Processing Payment...
                     </>
-                  ) : (!deliveryAddress || deliveryAddress.trim() === '') ? (
+                  ) : !deliveryAddress || deliveryAddress.trim() === "" ? (
                     <>
                       <Shield className="me-2" size={18} />
                       Set Delivery Address to Pay
