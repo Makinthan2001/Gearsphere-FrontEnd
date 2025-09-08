@@ -143,8 +143,6 @@ function TechnicianManagement() {
         }
       );
     } catch (error) {
-      console.error("Error updating approval status:", error);
-
       // Rollback optimistic update
       setTechnicians((prev) =>
         prev.map((tech) =>

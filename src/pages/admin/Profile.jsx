@@ -17,14 +17,35 @@ const AdminProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [addressWithoutDistrict, setAddressWithoutDistrict] = useState("");
-  
+
   const districts = [
-    "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", "Hambantota",
-    "Jaffna", "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar", "Matale",
-    "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya", "Polonnaruwa", "Puttalam", "Ratnapura",
-    "Trincomalee", "Vavuniya"
+    "Ampara",
+    "Anuradhapura",
+    "Badulla",
+    "Batticaloa",
+    "Colombo",
+    "Galle",
+    "Gampaha",
+    "Hambantota",
+    "Jaffna",
+    "Kalutara",
+    "Kandy",
+    "Kegalle",
+    "Kilinochchi",
+    "Kurunegala",
+    "Mannar",
+    "Matale",
+    "Matara",
+    "Monaragala",
+    "Mullaitivu",
+    "Nuwara Eliya",
+    "Polonnaruwa",
+    "Puttalam",
+    "Ratnapura",
+    "Trincomalee",
+    "Vavuniya",
   ];
-  
+
   const fileInputRef = useRef();
 
   useEffect(() => {
@@ -47,19 +68,14 @@ const AdminProfile = () => {
           // Parse address to extract district and address parts
           let district = "";
           let addressPart = "";
-          
+
           if (data.address) {
-            console.log("Admin address:", data.address);
-            const addressParts = data.address.split(', ');
-            console.log("Address parts:", addressParts);
+            const addressParts = data.address.split(", ");
             if (addressParts.length >= 2) {
               district = addressParts[addressParts.length - 1]; // Last part is district
-              addressPart = addressParts.slice(0, -1).join(', '); // Everything except last part
-              console.log("Parsed district:", district);
-              console.log("Parsed address part:", addressPart);
+              addressPart = addressParts.slice(0, -1).join(", "); // Everything except last part
             } else {
               addressPart = data.address; // If no comma, treat as address without district
-              console.log("No comma found, treating as address without district");
             }
           }
 
@@ -77,7 +93,6 @@ const AdminProfile = () => {
           window.dispatchEvent(new Event("profilePicUpdated"));
         }
       } catch (err) {
-        console.error("Fetch failed:", err);
         toast.error("Failed to fetch profile");
       } finally {
         setIsLoading(false);
@@ -95,24 +110,26 @@ const AdminProfile = () => {
   const handleDistrictChange = (e) => {
     const district = e.target.value;
     setSelectedDistrict(district);
-    
+
     // Update the combined address in formData (same format as customer profile)
-    const fullAddress = addressWithoutDistrict && district 
-      ? `${addressWithoutDistrict}, ${district}` 
-      : addressWithoutDistrict || district;
-    
+    const fullAddress =
+      addressWithoutDistrict && district
+        ? `${addressWithoutDistrict}, ${district}`
+        : addressWithoutDistrict || district;
+
     setFormData((prev) => ({ ...prev, address: fullAddress }));
   };
 
   const handleAddressChange = (e) => {
     const address = e.target.value;
     setAddressWithoutDistrict(address);
-    
+
     // Update the combined address in formData (same format as customer profile)
-    const fullAddress = address && selectedDistrict 
-      ? `${address}, ${selectedDistrict}` 
-      : address || selectedDistrict;
-    
+    const fullAddress =
+      address && selectedDistrict
+        ? `${address}, ${selectedDistrict}`
+        : address || selectedDistrict;
+
     setFormData((prev) => ({ ...prev, address: fullAddress }));
   };
 
@@ -168,7 +185,6 @@ const AdminProfile = () => {
         );
       }
     } catch (err) {
-      console.error("Update error:", err);
       toast.error("An error occurred during update");
     }
   };

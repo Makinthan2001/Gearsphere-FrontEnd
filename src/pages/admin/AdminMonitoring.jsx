@@ -25,7 +25,6 @@ const AdminMonitoring = () => {
           navigate("/");
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
         navigate("/");
       }
     };
@@ -51,7 +50,7 @@ const AdminMonitoring = () => {
         sessionStorage.setItem("monitoring_mode", "true");
       }
     } catch (error) {
-      console.error("Failed to store session info:", error);
+      // Failed to store session info, continue anyway
     }
 
     // Navigate to customer dashboard only
