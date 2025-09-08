@@ -48,7 +48,7 @@ export const OrdersProvider = ({ children }) => {
       }
       // Only log non-auth errors to avoid console spam for guest users
       if (error.response?.status !== 401) {
-        console.error("Error fetching orders:", error);
+        // Failed to fetch orders for authenticated user
       }
       setOrders([]);
     }
@@ -105,7 +105,6 @@ export const OrdersProvider = ({ children }) => {
         throw new Error(response.data.message || "Failed to create order");
       }
     } catch (error) {
-      console.error("Error adding order:", error);
       throw error;
     }
   };
@@ -120,7 +119,7 @@ export const OrdersProvider = ({ children }) => {
         )
       );
     } catch (error) {
-      console.error("Error updating order status:", error);
+      // Failed to update order status
     }
   };
 
