@@ -58,7 +58,6 @@ export default function CPUCoolerPage() {
         }
       } catch (err) {
         setError("Error fetching CPU coolers: " + err.message);
-        console.error("Error fetching CPU coolers:", err);
       } finally {
         setLoading(false);
       }
@@ -80,9 +79,12 @@ export default function CPUCoolerPage() {
         return prev.filter((item) => item.product_id !== cooler.product_id);
       } else {
         if (prev.length >= maxCompare) {
-          toast.warning(
-            `You can only compare up to ${maxCompare} CPU Coolers at a time on this device.`
-          );
+          // Don't call toast inside setState - move it outside
+          setTimeout(() => {
+            toast.warning(
+              `You can only compare up to ${maxCompare} CPU Coolers at a time on this device.`
+            );
+          }, 0);
           return prev;
         }
         return [...prev, cooler];

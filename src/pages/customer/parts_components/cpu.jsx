@@ -14,6 +14,7 @@ import { Cpu } from "react-bootstrap-icons";
 import CustomerNavbar from "../../pageNavbars/CustomerNavbar";
 import LoadingScreen from "../../../components/loading/LoadingScreen";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 // Add useBreakpoint hook
@@ -145,13 +146,24 @@ export default function CPUPage() {
 
   const handleToggleCompare = (option) => {
     setCompareSelection((prev) => {
-      if (prev.some((item) => item.name === option.name)) {
-        return prev.filter((item) => item.name !== option.name);
+      if (prev.some((item) => item.product_id === option.product_id)) {
+        return prev.filter((item) => item.product_id !== option.product_id);
       } else {
         if (prev.length >= maxCompare) {
-          toast.warning(
-            `You can only compare up to ${maxCompare} CPUs at a time on this device.`
-          );
+          // Don't call toast inside setState - move it outside
+          setTimeout(() => {
+            toast.warning(
+              `You can only compare up to ${maxCompare} CPUs at a time on this device.`,
+              {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              }
+            );
+          }, 0);
           return prev;
         }
         return [...prev, option];
