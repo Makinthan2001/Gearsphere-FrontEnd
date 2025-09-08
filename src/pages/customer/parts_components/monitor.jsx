@@ -58,7 +58,6 @@ export default function MonitorPage() {
         }
       } catch (err) {
         setError("Error fetching monitors: " + err.message);
-        console.error("Error fetching monitors:", err);
       } finally {
         setLoading(false);
       }
@@ -80,9 +79,11 @@ export default function MonitorPage() {
         return prev.filter((item) => item.product_id !== monitor.product_id);
       } else {
         if (prev.length >= maxCompare) {
-          toast.warning(
-            `You can only compare up to ${maxCompare} Monitors at a time on this device.`
-          );
+          setTimeout(() => {
+            toast.warning(
+              `You can only compare up to ${maxCompare} Monitors at a time on this device.`
+            );
+          }, 0);
           return prev;
         }
         return [...prev, monitor];

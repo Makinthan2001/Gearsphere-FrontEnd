@@ -145,9 +145,11 @@ export default function StoragePage() {
         return prev.filter((item) => item.product_id !== option.product_id);
       } else {
         if (prev.length >= maxCompare) {
-          toast.warning(
-            `You can only compare up to ${maxCompare} storage devices at a time on this device.`
-          );
+          setTimeout(() => {
+            toast.warning(
+              `You can only compare up to ${maxCompare} storage devices at a time on this device.`
+            );
+          }, 0);
           return prev;
         }
         return [...prev, option];
