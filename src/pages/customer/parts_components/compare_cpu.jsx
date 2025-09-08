@@ -149,7 +149,7 @@ export default function CompareCPUPage() {
         try {
           compareSelection = JSON.parse(storedSelection);
         } catch (e) {
-          console.warn("Failed to parse stored comparison selection:", e);
+          // Invalid JSON in storage, ignore
         }
       }
     } else {
@@ -168,7 +168,6 @@ export default function CompareCPUPage() {
         }));
         setCpus(cpusWithIcons);
       } catch (error) {
-        console.error("Error parsing CPU data:", error);
         toast.error("Error loading CPU comparison data");
       }
     }

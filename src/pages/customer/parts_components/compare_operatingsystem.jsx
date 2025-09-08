@@ -136,7 +136,6 @@ export default function CompareOperatingSystemPage() {
         }));
         setOses(osesWithIcons);
       } catch (error) {
-        console.error("Error parsing OS data:", error);
         toast.error("Error loading Operating System comparison data");
       }
     }
