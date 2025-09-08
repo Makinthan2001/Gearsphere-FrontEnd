@@ -121,7 +121,7 @@ export default function CompareCasePage() {
         try {
           compareSelection = JSON.parse(storedSelection);
         } catch (e) {
-          console.warn("Failed to parse stored comparison selection:", e);
+          // Invalid JSON in storage, ignore
         }
       }
     } else {
@@ -157,7 +157,6 @@ export default function CompareCasePage() {
             setLoading(false);
           });
       } catch (error) {
-        console.error("Error parsing case data:", error);
         toast.error("Error loading case comparison data");
         setLoading(false);
       }
