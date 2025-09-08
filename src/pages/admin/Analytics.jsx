@@ -73,7 +73,6 @@ const Analytics = () => {
       const backendPeriods = (analyticsData.salesTrend || []).map(
         (item) => item.period
       );
-      console.log("Backend periods:", backendPeriods); // Debug log
 
       // If we have backend data, use those periods
       if (backendPeriods.length > 0) {
@@ -97,9 +96,7 @@ const Analytics = () => {
 
     // Always use current month as the latest month to ensure it's included
     const currentMonth = new Date().toISOString().slice(0, 7); // Should be "2025-08"
-    console.log("Current month:", currentMonth); // Debug log
     const lastNMonths = getMonthsFromBackendData(); // Use dynamic months from backend
-    console.log("Generated months:", lastNMonths); // Debug log
     const salesTrendMap = {};
     (analyticsData.salesTrend || []).forEach((item) => {
       salesTrendMap[item.period] = item;
@@ -109,7 +106,6 @@ const Analytics = () => {
       revenue: salesTrendMap[period]?.revenue || 0,
       orders: salesTrendMap[period]?.orders || 0,
     }));
-    console.log("Normalized sales trend:", normalizedSalesTrend); // Debug log
 
     // Format month labels for better readability (e.g., "Aug 2025" instead of "2025-08")
     const formatMonthLabel = (monthString) => {
