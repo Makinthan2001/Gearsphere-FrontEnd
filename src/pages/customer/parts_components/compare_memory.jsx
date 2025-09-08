@@ -127,7 +127,7 @@ export default function CompareMemoryPage() {
         try {
           compareSelection = JSON.parse(storedSelection);
         } catch (e) {
-          console.warn("Failed to parse stored comparison selection:", e);
+          // Invalid JSON in storage, ignore
         }
       }
     } else {

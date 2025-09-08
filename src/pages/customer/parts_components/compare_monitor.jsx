@@ -142,7 +142,6 @@ export default function CompareMonitorPage() {
         }));
         setMonitors(monitorsWithIcons);
       } catch (error) {
-        console.error("Error parsing monitor data:", error);
         toast.error("Error loading monitor comparison data");
       }
     }
