@@ -40,7 +40,6 @@ export default function TechnicianFeedback({ technicianId }) {
           );
           const reviewsData = await reviewsResponse.json();
 
-          console.log("Fetched reviews:", reviewsData); // Debug log
           setReviews(Array.isArray(reviewsData) ? reviewsData : []);
           setLoading(false);
 
