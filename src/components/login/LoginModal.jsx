@@ -56,7 +56,7 @@ function LoginModal({ show, onHide, switchToRegister }) {
           withCredentials: true, // Important for session cookies
         }
       );
-      console.log(response.data);
+
       if (response.data.success) {
         const { user_type } = response.data;
 
@@ -72,21 +72,14 @@ function LoginModal({ show, onHide, switchToRegister }) {
         sessionStorage.removeItem("logout_timestamp");
 
         // Navigate based on user type - backend session handles authentication
-        console.log("Navigating for user_type:", user_type.toLowerCase());
         if (user_type.toLowerCase() === "admin") {
-          console.log("Navigating to admin dashboard");
           navigate("/admin", { replace: true });
         } else if (user_type.toLowerCase() === "customer") {
-          console.log("Navigating to customer dashboard");
           navigate("/customer/dashboard", { replace: true });
         } else if (user_type.toLowerCase() === "technician") {
-          console.log("Navigating to technician dashboard");
           navigate("/technician/dashboard", { replace: true });
         } else if (user_type.toLowerCase() === "seller") {
-          console.log("Navigating to seller dashboard");
           navigate("/seller", { replace: true });
-        } else {
-          console.log("Unknown user type:", user_type);
         }
 
         // Prevent back navigation to home/login pages after login
@@ -127,7 +120,6 @@ function LoginModal({ show, onHide, switchToRegister }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
       if (error.response && error.response.data) {
         toast.error(error.response.data.message);
       } else if (error.message) {
@@ -205,7 +197,7 @@ function LoginModal({ show, onHide, switchToRegister }) {
             new_password: newPassword,
           }
         );
-        console.log("Change Password Response:", response.data);
+
         if (response.data.success) {
           toast.success(response.data.message);
           setTimeout(() => {

@@ -24,10 +24,30 @@ const TechnicianProfile = () => {
 
   // Sri Lankan districts
   const districts = [
-    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
-    'Galle', 'Matara', 'Hambantota', 'Kurunegala', 'Anuradhapura', 'Polonnaruwa',
-    'Ratnapura', 'Kegalle', 'Badulla', 'Monaragala', 'Ampara', 'Batticaloa',
-    'Trincomalee', 'Jaffna', 'Mannar', 'Vavuniya', 'Kilinochchi', 'Mullaitivu'
+    "Colombo",
+    "Gampaha",
+    "Kalutara",
+    "Kandy",
+    "Matale",
+    "Nuwara Eliya",
+    "Galle",
+    "Matara",
+    "Hambantota",
+    "Kurunegala",
+    "Anuradhapura",
+    "Polonnaruwa",
+    "Ratnapura",
+    "Kegalle",
+    "Badulla",
+    "Monaragala",
+    "Ampara",
+    "Batticaloa",
+    "Trincomalee",
+    "Jaffna",
+    "Mannar",
+    "Vavuniya",
+    "Kilinochchi",
+    "Mullaitivu",
   ];
 
   useEffect(() => {
@@ -64,19 +84,14 @@ const TechnicianProfile = () => {
           // Parse address to extract district and address parts
           let district = "";
           let addressPart = "";
-          
+
           if (data.technician.address) {
-            console.log("Technician address:", data.technician.address);
-            const addressParts = data.technician.address.split(', ');
-            console.log("Address parts:", addressParts);
+            const addressParts = data.technician.address.split(", ");
             if (addressParts.length >= 2) {
               district = addressParts[addressParts.length - 1]; // Last part is district
-              addressPart = addressParts.slice(0, -1).join(', '); // Everything except last part
-              console.log("Parsed district:", district);
-              console.log("Parsed address part:", addressPart);
+              addressPart = addressParts.slice(0, -1).join(", "); // Everything except last part
             } else {
               addressPart = data.technician.address; // If no comma, treat as address without district
-              console.log("No comma found, treating as address without district");
             }
           }
 
@@ -122,32 +137,35 @@ const TechnicianProfile = () => {
   const handleDistrictChange = (e) => {
     const district = e.target.value;
     setSelectedDistrict(district);
-    
+
     // Update the full address in formData (same format as customer profile)
-    const fullAddress = addressWithoutDistrict && district 
-      ? `${addressWithoutDistrict}, ${district}`
-      : addressWithoutDistrict || district;
-    
-    setFormData((prev) => ({ 
-      ...prev, 
-      address: fullAddress 
+    const fullAddress =
+      addressWithoutDistrict && district
+        ? `${addressWithoutDistrict}, ${district}`
+        : addressWithoutDistrict || district;
+
+    setFormData((prev) => ({
+      ...prev,
+      address: fullAddress,
     }));
   };
 
   const handleAddressChange = (e) => {
     const address = e.target.value;
     setAddressWithoutDistrict(address);
-    
+
     // Update the full address in formData (same format as customer profile)
-    const fullAddress = address && selectedDistrict 
-      ? `${address}, ${selectedDistrict}` 
-      : address || selectedDistrict;
-    
-    setFormData((prev) => ({ 
-      ...prev, 
-      address: fullAddress 
+    const fullAddress =
+      address && selectedDistrict
+        ? `${address}, ${selectedDistrict}`
+        : address || selectedDistrict;
+
+    setFormData((prev) => ({
+      ...prev,
+      address: fullAddress,
     }));
-  };  const handleProfilePicChange = (e) => {
+  };
+  const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfilePicFile(file);
@@ -189,12 +207,6 @@ const TechnicianProfile = () => {
       const userId = sessionResponse.data.user_id;
 
       // Debug: Print payload values
-      // console.log(
-      //   "Submitting technician_id:",
-      //   technician_id,
-      //   "charge_per_day:",
-      //   formData.charge_per_day
-      // );
 
       const payload = new FormData();
       payload.append("user_id", userId);
