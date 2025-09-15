@@ -37,7 +37,7 @@ const Inventory = () => {
     status: "",
     lastRestockDate: "",
   });
-  
+
   // State to track if notifications have been sent for current session
   const [notificationsSent, setNotificationsSent] = useState(false);
 
@@ -73,44 +73,15 @@ const Inventory = () => {
     try {
       setLoading(true);
 
-      console.log(
-        "Fetching inventory from:",
-        `${API_BASE_URL}/getProducts.php`
-      );
-
       const response = await fetch(`${API_BASE_URL}/getProducts.php`);
-      console.log("Response status:", response.status);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("API response:", data);
-
-      // Extra debug: log all product statuses from backend
-      if (data.products) {
-        data.products.forEach((p) =>
-          console.log(
-            `Product: ${p.name}, Stock: ${p.stock}, Status: ${p.status}`
-          )
-        );
-      }
 
       if (data.success) {
-        // Debug: Log raw data from backend
-        console.log(
-          "Raw products data from backend:",
-          data.products.map((p) => ({
-            id: p.product_id,
-            name: p.name,
-            stock: p.stock,
-            price: p.price,
-            raw_stock: typeof p.stock,
-            raw_price: typeof p.price,
-          }))
-        );
-
         // Transform the data to match inventory expectations
         const transformedInventory = data.products.map((product) => ({
           id: product.product_id,
@@ -132,32 +103,6 @@ const Inventory = () => {
           manufacturer: product.manufacturer,
         }));
 
-        console.log("Transformed inventory:", transformedInventory);
-
-        // Debug: Log total value calculation
-        const totalValue = transformedInventory.reduce(
-          (sum, item) => sum + item.value,
-          0
-        );
-        console.log("Total inventory value calculation:", {
-          totalProducts: transformedInventory.length,
-          totalValue: totalValue,
-          valueBreakdown: transformedInventory.map((item) => ({
-            name: item.name,
-            stock: item.currentStock,
-            price: item.price,
-            value: item.value,
-            calculation: `${item.currentStock} × LKR ${item.price} = LKR ${item.value}`,
-          })),
-        });
-
-        // Extra debug: log transformed inventory statuses
-        transformedInventory.forEach((item) =>
-          console.log(
-            `Transformed: ${item.name}, Stock: ${item.currentStock}, Status: ${item.status}`
-          )
-        );
-
         setInventory(transformedInventory);
       } else {
         toast.error(data.message || "Failed to fetch inventory", {
@@ -166,7 +111,6 @@ const Inventory = () => {
         });
       }
     } catch (err) {
-      console.error("Error fetching inventory:", err);
       toast.error("Error connecting to server: " + err.message, {
         autoClose: 2000,
         hideProgressBar: false,
@@ -179,44 +123,46 @@ const Inventory = () => {
   // Function to create low stock notifications
   const createLowStockNotifications = async (lowStockItems) => {
     if (lowStockItems.length === 0) return;
-    
+
     try {
       // Get session to verify user is logged in as seller
       const sessionResponse = await axios.get(
-        'http://localhost/gearsphere_api/GearSphere-BackEnd/getSession.php',
+        "http://localhost/gearsphere_api/GearSphere-BackEnd/getSession.php",
         { withCredentials: true }
       );
 
-      if (!sessionResponse.data.success || sessionResponse.data.user_type !== 'seller') {
+      if (
+        !sessionResponse.data.success ||
+        sessionResponse.data.user_type !== "seller"
+      ) {
         return; // Only sellers can receive inventory notifications
       }
 
       const sellerId = sessionResponse.data.user_id;
-      
+
       // Create a comprehensive low stock notification message
       let message = `Low Stock Alert!\nYou have ${lowStockItems.length} items that need attention:\n\n`;
-      
-      lowStockItems.slice(0, 10).forEach(item => { // Limit to 10 items to avoid overly long messages
+
+      lowStockItems.slice(0, 10).forEach((item) => {
+        // Limit to 10 items to avoid overly long messages
         message += `${item.name} - Current Stock: ${item.currentStock} (Min: ${item.minStock})\n`;
       });
-      
+
       if (lowStockItems.length > 10) {
         message += `\n... and ${lowStockItems.length - 10} more items`;
       }
 
       // Send notification to backend
       await axios.post(
-        'http://localhost/gearsphere_api/GearSphere-BackEnd/addNotification.php',
+        "http://localhost/gearsphere_api/GearSphere-BackEnd/addNotification.php",
         {
           user_id: sellerId,
-          message: message
+          message: message,
         },
         { withCredentials: true }
       );
-      
-      console.log('Low stock notification sent successfully');
     } catch (error) {
-      console.error('Failed to send low stock notification:', error);
+      // Failed to send low stock notification
     }
   };
 
@@ -228,10 +174,10 @@ const Inventory = () => {
   // Create notifications when inventory changes and low stock items are detected
   useEffect(() => {
     if (inventory.length > 0) {
-      const currentLowStockItems = inventory.filter(item => 
-        item.status === 'Low Stock' || item.status === 'Out of Stock'
+      const currentLowStockItems = inventory.filter(
+        (item) => item.status === "Low Stock" || item.status === "Out of Stock"
       );
-      
+
       // Only create notifications if there are actually low stock items
       if (currentLowStockItems.length > 0 && !notificationsSent) {
         createLowStockNotifications(currentLowStockItems);
@@ -280,8 +226,6 @@ const Inventory = () => {
         return;
       }
 
-      console.log("Updating stock for product:", productId, stockValue);
-
       // Create FormData for the stock update
       const formData = new FormData();
       formData.append("product_id", productId.toString());
@@ -297,19 +241,11 @@ const Inventory = () => {
         body: formData,
       });
 
-      console.log("Update stock response status:", response.status);
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log("Update stock result:", result);
-
-      // Extra debug: log new status from backend
-      if (result.data) {
-        console.log(`Backend new_status: ${result.data.new_status}`);
-      }
 
       if (result.success) {
         // Refresh inventory list
@@ -354,7 +290,6 @@ const Inventory = () => {
         });
       }
     } catch (err) {
-      console.error("Error updating stock:", err);
       toast.error("Error updating stock and status: " + err.message, {
         autoClose: 2000,
         hideProgressBar: false,
@@ -500,9 +435,9 @@ const Inventory = () => {
                 style={{ width: "200px" }}
                 value={categoryFilter}
                 onChange={(e) => {
-  setCategoryFilter(e.target.value);
-  setCurrentPage(1);
-}}
+                  setCategoryFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
               >
                 <option value="all">All Categories</option>
                 {categories.map((category) => (
@@ -515,9 +450,9 @@ const Inventory = () => {
                 style={{ width: "200px" }}
                 value={stockFilter}
                 onChange={(e) => {
-  setStockFilter(e.target.value);
-  setCurrentPage(1);
-}}
+                  setStockFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
               >
                 <option value="all">All Stock Status</option>
                 <option value="In Stock">In Stock</option>
@@ -531,9 +466,9 @@ const Inventory = () => {
               style={{ width: "300px" }}
               value={searchQuery}
               onChange={(e) => {
-  setSearchQuery(e.target.value);
-  setCurrentPage(1);
-}}
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
 

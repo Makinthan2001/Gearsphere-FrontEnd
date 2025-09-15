@@ -101,17 +101,13 @@ const ProductManagement = () => {
       setLoading(true);
       setError(null);
 
-      console.log("Fetching products from:", `${API_BASE_URL}/getProducts.php`);
-
       const response = await fetch(`${API_BASE_URL}/getProducts.php`);
-      console.log("Response status:", response.status);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("API response:", data);
 
       if (data.success) {
         // Transform the data to match frontend expectations
@@ -132,13 +128,11 @@ const ProductManagement = () => {
           specific_details: product.specific_details,
         }));
 
-        console.log("Transformed products:", transformedProducts);
         setProducts(transformedProducts);
       } else {
         setError(data.message || "Failed to fetch products");
       }
     } catch (err) {
-      console.error("Error fetching products:", err);
       setError("Error connecting to server: " + err.message);
     } finally {
       setLoading(false);
@@ -164,8 +158,6 @@ const ProductManagement = () => {
     try {
       setSubmitting(true);
 
-      console.log("Adding product:", productData);
-
       // Create FormData for file upload
       const formData = new FormData();
 
@@ -173,7 +165,6 @@ const ProductManagement = () => {
       Object.keys(productData).forEach((key) => {
         if (key === "image" && productData[key]) {
           formData.append("image", productData[key]);
-          console.log("Added image file:", productData[key].name);
         } else if (key !== "image") {
           formData.append(key, productData[key]);
         }
@@ -196,21 +187,16 @@ const ProductManagement = () => {
       const productType = categoryToType[productData.category] || "general";
       formData.append("type", productType);
 
-      console.log("Sending request to:", `${API_BASE_URL}/addProduct.php`);
-
       const response = await fetch(`${API_BASE_URL}/addProduct.php`, {
         method: "POST",
         body: formData,
       });
-
-      console.log("Add product response status:", response.status);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log("Add product result:", result);
 
       if (result.success) {
         // Refresh products list
@@ -231,7 +217,6 @@ const ProductManagement = () => {
         });
       }
     } catch (err) {
-      console.error("Error adding product:", err);
       toast.error("Error adding product: " + err.message, {
         autoClose: 2000,
         hideProgressBar: false,
@@ -244,11 +229,6 @@ const ProductManagement = () => {
   const handleEditProduct = async (productData) => {
     try {
       setSubmitting(true);
-
-      console.log("Editing product data:", productData);
-      console.log("Edit product ID:", productData.id);
-      console.log("Edit product name:", productData.name);
-      console.log("Edit product category:", productData.category);
 
       // Create FormData for file upload
       const formData = new FormData();
@@ -282,33 +262,14 @@ const ProductManagement = () => {
       const productType = categoryToType[productData.category] || "general";
       formData.append("type", productType);
 
-      // Debug: Log what's being sent
-      console.log("FormData contents:");
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-
-      console.log(
-        "Sending edit request to:",
-        `${API_BASE_URL}/updateProduct.php`
-      );
-
       const response = await fetch(`${API_BASE_URL}/updateProduct.php`, {
         method: "POST",
         body: formData,
       });
 
-      console.log("Edit response status:", response.status);
-
       const result = await response.json();
-      console.log("Edit result:", result);
-
-      // Debug: Check if result has success property
-      console.log("Result success property:", result.success);
-      console.log("Result message:", result.message);
 
       if (result.success) {
-        console.log("✅ Edit successful - showing success toast");
         // Refresh products list
         await fetchProducts();
         setShowEditModal(false);
@@ -320,14 +281,12 @@ const ProductManagement = () => {
           hideProgressBar: false,
         });
       } else {
-        console.log("❌ Edit failed - showing error toast");
         toast.error(result.message || "Failed to update product", {
           autoClose: 2000,
           hideProgressBar: false,
         });
       }
     } catch (err) {
-      console.error("Error updating product:", err);
       toast.error("Error updating product: " + err.message, {
         autoClose: 2000,
         hideProgressBar: false,
