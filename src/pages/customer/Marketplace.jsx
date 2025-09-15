@@ -81,6 +81,12 @@ function Marketplace() {
     setShowToast(true);
   };
 
+  const handleProductClick = (product) => {
+    navigate(`/product/${product.product_id}`, {
+      state: { product },
+    });
+  };
+
   const truncateDescription = (description, maxLength = 80) => {
     if (description.length <= maxLength) return description;
     return description.substring(0, maxLength) + "...";
@@ -175,23 +181,28 @@ function Marketplace() {
         {currentProducts.map((product) => (
           <Col key={product.id} lg={3} md={4} sm={6} className="mb-4">
             <Card className="h-100 shadow-sm">
-              <Card.Img
-                variant="top"
-                src={
-                  product.image_url
-                    ? `http://localhost/gearsphere_api/GearSphere-BackEnd/${product.image_url}`
-                    : "/placeholder.svg?height=200&width=200"
-                }
-                alt={product.name}
-                style={{
-                  height: "200px",
-                  objectFit: "contain",
-                  padding: "8px",
-                  background: "rgba(0,255,247,0.04)",
-                  borderRadius: "12px",
-                  margin: "12px",
-                }}
-              />
+              <div
+                onClick={() => handleProductClick(product)}
+                style={{ cursor: "pointer" }}
+              >
+                <Card.Img
+                  variant="top"
+                  src={
+                    product.image_url
+                      ? `http://localhost/gearsphere_api/GearSphere-BackEnd/${product.image_url}`
+                      : "/placeholder.svg?height=200&width=200"
+                  }
+                  alt={product.name}
+                  style={{
+                    height: "200px",
+                    objectFit: "contain",
+                    padding: "8px",
+                    background: "rgba(0,255,247,0.04)",
+                    borderRadius: "12px",
+                    margin: "12px",
+                  }}
+                />
+              </div>
               <Card.Body className="d-flex flex-column">
                 <div className="d-flex justify-content-between align-items-start mb-2">
                   <Badge bg="primary" className="mb-1">
@@ -199,60 +210,13 @@ function Marketplace() {
                   </Badge>
                   {getStatusBadge(product.status)}
                 </div>
-                <Card.Title className="h6">{product.name}</Card.Title>
-                <div
-                  className="text-muted small flex-grow-1"
-                  style={{
-                    cursor: "pointer",
-                    minHeight: "40px",
-                    padding: "8px",
-                    border: "1px solid #e9ecef",
-                    borderRadius: "4px",
-                    backgroundColor: "#f8f9fa",
-                    position: "relative",
-                  }}
-                  onMouseEnter={() => setHoveredProduct(product.id)}
-                  onMouseLeave={() => setHoveredProduct(null)}
+                <Card.Title
+                  className="h6"
+                  onClick={() => handleProductClick(product)}
+                  style={{ cursor: "pointer" }}
                 >
-                  {truncateDescription(product.description)}
-                  {hoveredProduct === product.id && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: "100%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        background: "#333",
-                        color: "white",
-                        padding: "1px 4px",
-                        fontSize: "14px",
-                        whiteSpace: "pre-wrap",
-                        width: "300px",
-                        maxWidth: "300px",
-                        zIndex: 9999,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
-                        marginBottom: "8px",
-                        wordWrap: "break-word",
-                        border: "1px solid #555",
-                        lineHeight: "1.2",
-                        borderRadius: "6px",
-                        opacity: "0.9",
-                      }}
-                    >
-                      {product.description}
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          border: "5px solid transparent",
-                          borderTopColor: "#333",
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
+                  {product.name}
+                </Card.Title>
                 <div className="mt-auto">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="h5 mb-0 text-primary">
