@@ -49,10 +49,11 @@ import CompareOperatingSystem from "./pages/customer/parts_components/compare_op
 import CustomerReviews from "./pages/customer/CustomerReviews";
 import TechnicianFeedback from "./pages/technician/TechnicianFeedback";
 import AdminModerateReviews from "./pages/admin/AdminModerateReviews";
+import ProductDetails from "./pages/customer/parts_pages/ProductDetails";
 
 // Technician Pages
 import TechnicianDashboard from "./pages/technician/Dashboard";
-import TechnicianServices from "./pages/technician/Services";
+// import TechnicianServices from "./pages/technician/Services";
 import BuildRequests from "./pages/technician/BuildRequests";
 import TechnicianProfile from "./pages/technician/Profile";
 
@@ -60,7 +61,7 @@ import TechnicianProfile from "./pages/technician/Profile";
 import CustomerManagement from "./pages/admin/CustomerManagement";
 import Analytics from "./pages/admin/Analytics";
 import AdminMain from "./pages/admin/AdminMain";
-import Reports from "./pages/admin/Reports";
+// import Reports from "./pages/admin/Reports";
 import AdminProfile from "./pages/admin/Profile";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AdminMonitoring from "./pages/admin/AdminMonitoring";
@@ -112,6 +113,7 @@ function AppContent() {
           <Route path="/customer" element={<CustomerDashboard />} />
           <Route path="/customer/dashboard" element={<CustomerDashboard />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/pc-builder" element={<PCBuilder />} />
           <Route path="/cpu" element={<CPUPage />} />
           <Route path="/compare-cpu" element={<CompareCPU />} />
@@ -157,7 +159,7 @@ function AppContent() {
             element={<TechnicianDashboard />}
           />
           <Route path="/technician/profile" element={<TechnicianProfile />} />
-          <Route path="/technician/services" element={<TechnicianServices />} />
+          {/* <Route path="/technician/services" element={<TechnicianServices />} /> */}
           <Route
             path="/technician/build-requests"
             element={<BuildRequests />}
@@ -178,7 +180,7 @@ function AppContent() {
           <Route path="/admin/customers" element={<CustomerManagement />} />
           <Route path="/admin/technicians" element={<TechnicianManagement />} />
           <Route path="/admin/analytics" element={<Analytics />} />
-          <Route path="/admin/reports" element={<Reports />} />
+          {/* <Route path="/admin/reports" element={<Reports />} /> */}
           <Route path="/admin/profile" element={<AdminProfile />} />
           <Route path="/admin/messages" element={<AdminMessages />} />
           <Route path="/admin/reviews" element={<AdminModerateReviews />} />
