@@ -52,11 +52,11 @@ function TechnicianInstruction({ show, onHide, onAgree, imgSrc }) {
           <h3>PC Technician Registration Instructions</h3>
           <p>Welcome to GearSphere! Please adhere to these guidelines for a seamless experience:</p>
           <ul>
-            <li>Do not share your mobile number with customers; all interactions must be conducted through the application.</li>
+            <li>Do can get customer details through the application.</li>
             <li><b>You must submit a PDF, DOC, or DOCX file as proof of your qualifications (CV).</b></li>
-            <li>You can login after you are verified by the admin team.</li>
+            <li>You can get build request after you are verified by the admin .</li>
             <li>All communications with customers must remain within the platform.</li>
-            <li>If you are unable to attend to a customer, decline their request within two weeks of the booking date.</li>
+            <li>If you are unable to attend to a customer, reject their request within one weeks of the assign date.</li>
             <li>Following these instructions helps maintain the integrity and reliability of our platform.</li>
           </ul>
           <p>Thank you for your cooperation and professionalism.</p>
