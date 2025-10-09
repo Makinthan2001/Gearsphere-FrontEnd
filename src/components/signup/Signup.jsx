@@ -72,6 +72,30 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
     "Vavuniya",
   ];
 
+  // Phone number validation function
+  const validatePhoneNumber = (phone) => {
+    // Remove all spaces and special characters for validation
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+    
+    // Check for exactly 10 digits starting with 0
+    const phonePattern = /^0\d{9}$/;
+    
+    return phonePattern.test(cleanPhone);
+  };
+
+  // Postal code validation function
+  const validatePostalCode = (code) => {
+    // Sri Lankan postal codes are 5 digits
+    const postalPattern = /^\d{5}$/;
+    return postalPattern.test(code);
+  };
+
+  // City name validation function
+  const validateCity = (city) => {
+    const cityPattern = /^[a-zA-Z\s]+$/; // Only letters and spaces
+    return cityPattern.test(city) && city.trim().length >= 2;
+  };
+
   const sendOTP = async () => {
     try {
       const res = await axios.post(
@@ -129,7 +153,7 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
     formData.append("name", fullName);
     formData.append("email", email);
     formData.append("password", password);
-    formData.append("contact_number", username); // or use a phone field if you have one
+    formData.append("contact_number", contactNumber); 
     formData.append("address", fullAddress);
     formData.append("userType", "technician");
     formData.append("experience", techExperience);
@@ -245,6 +269,25 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
       toast.error("All fields are required.");
       return;
     }
+
+    // Phone number validation
+    if (!validatePhoneNumber(contactNumber)) {
+      toast.error("Phone number must be 10 digits starting with 0 (e.g., 0771234567)");
+      return;
+    }
+
+    // Postal code validation
+    if (!validatePostalCode(postalCode)) {
+      toast.error("Postal code must be exactly 5 digits (e.g., 10230)");
+      return;
+    }
+
+    // City name validation
+    if (!validateCity(city)) {
+      toast.error("City name should only contain letters and spaces");
+      return;
+    }
+
     const nameRegex = /^[a-zA-Z]+$/;
     if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
       toast.error("First name and last name should only contain letters.");
@@ -282,11 +325,32 @@ const Signup = ({ signupClose, loginClose, setShowTechnicianInstruction }) => {
       !district ||
       !email ||
       !password ||
-      !confirmPassword
+      !confirmPassword ||
+      !postalCode ||
+      !contactNumber
     ) {
       toast.error("Please fill in all fields.");
       return;
     }
+
+    // Phone number validation
+    if (!validatePhoneNumber(contactNumber)) {
+      toast.error("Phone number must be 10 digits starting with 0 (e.g., 0771234567)");
+      return;
+    }
+
+    // Postal code validation
+    if (!validatePostalCode(postalCode)) {
+      toast.error("Postal code must be exactly 5 digits (e.g., 10230)");
+      return;
+    }
+
+    // City name validation
+    if (!validateCity(city)) {
+      toast.error("City name should only contain letters and spaces");
+      return;
+    }
+
     const nameRegex = /^[a-zA-Z]+$/;
     if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
       toast.error("First name and last name should only contain letters.");

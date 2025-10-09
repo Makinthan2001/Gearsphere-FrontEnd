@@ -56,7 +56,6 @@ function LoginModal({ show, onHide, switchToRegister }) {
           withCredentials: true, // Important for session cookies
         }
       );
-
       if (response.data.success) {
         const { user_type } = response.data;
 
@@ -80,6 +79,8 @@ function LoginModal({ show, onHide, switchToRegister }) {
           navigate("/technician/dashboard", { replace: true });
         } else if (user_type.toLowerCase() === "seller") {
           navigate("/seller", { replace: true });
+        } else {
+          // Handle unknown user type
         }
 
         // Prevent back navigation to home/login pages after login
@@ -197,7 +198,6 @@ function LoginModal({ show, onHide, switchToRegister }) {
             new_password: newPassword,
           }
         );
-
         if (response.data.success) {
           toast.success(response.data.message);
           setTimeout(() => {
