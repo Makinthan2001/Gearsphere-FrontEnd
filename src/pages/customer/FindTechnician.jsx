@@ -186,7 +186,7 @@ function FindTechnician() {
         { withCredentials: true }
       );
       if (res.data && res.data.success) {
-        toast.success("Technician Assigned Successfully");
+        toast.success("Request Sent Successfully");
         setShowTechnicianModal(false);
         setShowAssignmentSuccess(true);
         setInstructions("");
@@ -666,29 +666,27 @@ function FindTechnician() {
         <Modal.Header closeButton>
           <Modal.Title className="text-success">
             <i className="bi bi-check-circle-fill me-2"></i>
-            Technician Assigned Successfully!
+            Request Sent Successfully!
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <div className="mb-4">
-            <div className="text-success" style={{ fontSize: "3rem" }}>
-              ✅
+            <div className="text-warning" style={{ fontSize: "3rem" }}>
+              ⏳
             </div>
           </div>
-          <h4 className="text-success mb-3">Assignment Confirmed</h4>
+          <h4 className="text-warning mb-3">Request Pending</h4>
           <p className="mb-3">
-            <strong>{selectedTechnician?.name}</strong> has been assigned to
-            your PC build project.
+            Your assignment request has been sent to <strong>{selectedTechnician?.name}</strong>.
           </p>
-          <div className="alert alert-info">
-            <strong>Next Steps:</strong>
+          <div className="alert alert-warning">
+            <strong>What happens next:</strong>
             <ul className="mb-0 mt-2 text-start">
-              <li>The technician will contact you within 24 hours</li>
-              <li>You'll discuss your PC build requirements</li>
-              <li>Schedule will be arranged for the build</li>
-              <li>
-                Payment for technician services will be handled separately
-              </li>
+              <li>The technician will review your request</li>
+              <li>You'll be notified once they accept or decline</li>
+              <li>If accepted, you can then discuss project details</li>
+              <li>If declined, you can choose another technician</li>
+              <li>Payment for technician services will be handled separately</li>
             </ul>
           </div>
         </Modal.Body>

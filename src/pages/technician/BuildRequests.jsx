@@ -156,6 +156,12 @@ const BuildRequests = () => {
     show: false,
     action: null,
   });
+  
+  // New states for PC parts modal
+  const [showPartsModal, setShowPartsModal] = useState(false);
+  const [partsData, setPartsData] = useState([]);
+  const [partsLoading, setPartsLoading] = useState(false);
+  const [partsError, setPartsError] = useState("");
 
   useEffect(() => {
     fetchBuildRequests();
@@ -209,6 +215,147 @@ const BuildRequests = () => {
       return `http://localhost/gearsphere_api/GearSphere-BackEnd/profile_images/${req.customer_profile_image}`;
     }
     return `http://localhost/gearsphere_api/GearSphere-BackEnd/profile_images/user_image.jpg`;
+  };
+
+  // Function to fetch PC parts for an assignment
+  const fetchPCParts = async (assignmentId) => {
+    try {
+      setPartsLoading(true);
+      setPartsError("");
+      
+      const response = await fetch(
+        `http://localhost/gearsphere_api/GearSphere-BackEnd/getOrders.php?assignment_id=${assignmentId}`
+      );
+      
+      const data = await response.json();
+      
+      if (data.success && data.orders && data.orders.length > 0) {
+        // Extract items from all orders for this assignment
+        const allItems = data.orders.flatMap(order => order.items || []);
+        setPartsData(allItems);
+        setShowPartsModal(true);
+      } else {
+        setPartsError("No PC parts found for this assignment. The customer may not have placed an order yet.");
+      }
+      setPartsLoading(false);
+    } catch (error) {
+      console.error("Error fetching PC parts:", error);
+      setPartsError("Failed to fetch PC parts");
+      setPartsLoading(false);
+    }
+  };
+
+  // PC Parts Modal Component
+  const PCPartsModal = ({ show, parts, onClose, loading, error }) => {
+    if (!show) return null;
+    
+    return (
+      <div style={modalOverlay}>
+        <div style={{
+          ...modalContent,
+          minWidth: 800,
+          maxWidth: 1000,
+          maxHeight: '90vh',
+          overflow: 'auto'
+        }}>
+          <button style={closeBtn} onClick={onClose}>
+            &times;
+          </button>
+          <h3 style={{ margin: '0 0 20px 0', color: '#333', textAlign: 'center' }}>
+            PC Parts Details
+          </h3>
+          
+          {loading && (
+            <div style={{ textAlign: 'center', padding: 40 }}>
+              <div>Loading PC parts...</div>
+            </div>
+          )}
+          
+          {error && (
+            <div style={{ 
+              color: '#e53935', 
+              textAlign: 'center', 
+              padding: 20,
+              background: '#ffebee',
+              borderRadius: 8,
+              border: '1px solid #ffcdd2'
+            }}>
+              {error}
+            </div>
+          )}
+          
+          {!loading && !error && parts.length > 0 && (
+            <div>
+              {/* Parts List */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {parts.map((part, idx) => (
+                  <div 
+                    key={`${part.product_id}-${idx}`} 
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: 16,
+                      background: idx % 2 === 0 ? '#fff' : '#f8f9fa',
+                      borderRadius: 8,
+                      border: '1px solid #e0e0e0',
+                      gap: 16
+                    }}
+                  >
+                    {/* Product Image */}
+                    <img
+                      src={part.image_url ? 
+                        `http://localhost/gearsphere_api/GearSphere-BackEnd/${part.image_url}` : 
+                        '/placeholder-product.png'
+                      }
+                      alt={part.name}
+                      style={{
+                        width: 60,
+                        height: 60,
+                        objectFit: 'cover',
+                        borderRadius: 8,
+                        border: '1px solid #ddd',
+                        flexShrink: 0
+                      }}
+                    />
+                    
+                    {/* Product Details */}
+                    <div style={{ flex: 1 }}>
+                      <div style={{ 
+                        fontWeight: 600, 
+                        fontSize: 15,
+                        color: '#333',
+                        marginBottom: 4 
+                      }}>
+                        {part.name}
+                      </div>
+                      {part.description && (
+                        <div style={{ 
+                          fontSize: 13, 
+                          color: '#666',
+                          lineHeight: 1.4
+                        }}>
+                          {part.description}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {!loading && !error && parts.length === 0 && (
+            <div style={{ textAlign: 'center', padding: 40, color: '#666' }}>
+              <div style={{ fontSize: 48, marginBottom: 16 }}>📦</div>
+              <div style={{ fontSize: 18, fontWeight: 500 }}>No PC parts found</div>
+              <div style={{ fontSize: 14, marginTop: 8 }}>
+                The customer hasn't placed an order for this build request yet.
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   // Custom confirmation modal
@@ -324,6 +471,63 @@ const BuildRequests = () => {
           {modalError && (
             <div style={{ color: "red", marginBottom: 8 }}>{modalError}</div>
           )}
+          
+          {/* PC Parts Details Button */}
+          <div style={{ textAlign: 'center', marginTop: 16, marginBottom: 16 }}>
+            <button
+              style={{
+                ...actionBtn,
+                background: 'linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '12px 24px',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                margin: '0 auto'
+              }}
+              onClick={() => fetchPCParts(request.assignment_id)}
+              disabled={partsLoading}
+            >
+              {partsLoading ? (
+                <>
+                  <div style={{
+                    width: 16,
+                    height: 16,
+                    border: '2px solid #fff',
+                    borderTop: '2px solid transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }}></div>
+                  Loading...
+                </>
+              ) : (
+                <>
+                  🛠️ View PC Parts Details
+                </>
+              )}
+            </button>
+            {partsError && (
+              <div style={{ 
+                color: '#e53935', 
+                fontSize: 12, 
+                marginTop: 8,
+                padding: 8,
+                background: '#ffebee',
+                borderRadius: 4,
+                border: '1px solid #ffcdd2'
+              }}>
+                {partsError}
+              </div>
+            )}
+          </div>
+          
           <div style={{ textAlign: "center", marginTop: 18 }}>
             {statusToShow === "pending" && (
               <>
@@ -384,6 +588,14 @@ const BuildRequests = () => {
 
   return (
     <div style={{ padding: 24, maxWidth: 1100, margin: "0 auto" }}>
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
       <h2 className="mb-4" style={{ fontWeight: 700, color: "#000" }}>
         Build Requests
       </h2>
@@ -480,6 +692,19 @@ const BuildRequests = () => {
           onClose={() => setShowModal(false)}
         />
       )}
+      
+      {/* PC Parts Modal */}
+      <PCPartsModal
+        show={showPartsModal}
+        parts={partsData}
+        onClose={() => {
+          setShowPartsModal(false);
+          setPartsData([]);
+          setPartsError("");
+        }}
+        loading={partsLoading}
+        error={partsError}
+      />
     </div>
   );
 };

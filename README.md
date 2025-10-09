@@ -1,319 +1,264 @@
-# GearSphere - PC Building & Marketplace Platform
+# GearSphere 🛠️💻
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)](https://php.net)
 [![React](https://img.shields.io/badge/React-18.0%2B-61dafb.svg)](https://reactjs.org)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-orange.svg)](https://mysql.com)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com)
 
-GearSphere is a comprehensive web application that revolutionizes the PC building experience by connecting customers with quality components and professional technicians. The platform serves as both a marketplace for PC parts and a service hub for custom PC builds.
+A comprehensive PC building and marketplace platform that connects customers with quality components and professional technicians for custom PC builds.
 
-## 🚀 Features
+## ✨ Overview
 
-### 🎯 Core Functionality
-- **PC Builder Tool**: Interactive component selection with budget-based recommendations
-- **Marketplace**: Browse and purchase PC components from verified sellers
-- **Technician Services**: Connect with professional PC builders and technicians
-- **Multi-User System**: Separate dashboards for customers, sellers, technicians, and administrators
+GearSphere revolutionizes the PC building experience by providing an integrated platform where users can:
+- 🔧 Build custom PCs with intelligent component suggestions
+- 🛍️ Browse and purchase PC components from verified sellers
+- 👨‍🔧 Connect with certified technicians for professional assembly
+- 📊 Compare components and get budget-optimized recommendations
 
-### 👥 User Roles
+## 🚀 Key Features
 
-#### 🛒 **Customers**
-- Build custom PCs with intelligent component recommendations
-- Browse and purchase PC components
-- Assign technicians for professional PC assembly
-- Track orders and build progress
-- Leave reviews and feedback
+### 🎯 PC Builder
+- **Intelligent Recommendations**: AI-powered component suggestions based on budget and usage
+- **Compatibility Checking**: Automatic validation of component compatibility
+- **Budget Optimization**: Smart allocation across different price ranges
+- **Real-time Comparison**: Side-by-side component analysis
 
-#### 🏪 **Sellers**
-- Manage product inventory and listings
-- Track sales analytics and performance
-- Update product information and pricing
-- Handle customer orders
+### 🛒 Marketplace
+- **Verified Sellers**: Curated marketplace with trusted component suppliers
+- **Advanced Search**: Filter by specifications, price, brand, and compatibility
+- **Secure Transactions**: Protected payment processing and order management
+- **Reviews & Ratings**: Community-driven feedback system
 
-#### 🔧 **Technicians**
-- Receive and manage build requests
-- Update assignment status and progress
-- Communicate with customers
-- Showcase specializations and experience
+### 👥 Multi-Role System
+- **Customers**: Browse, build, and purchase PC components
+- **Sellers**: Manage inventory, track sales, and analytics
+- **Technicians**: Offer assembly services and manage appointments
+- **Admins**: Platform oversight, user management, and analytics
 
-#### 👨‍💼 **Administrators**
-- Manage all users and their permissions
-- Monitor platform analytics and statistics
-- Moderate reviews and content
-- Oversee system operations
+### 🔧 Professional Services
+- **Technician Assignment**: Connect with verified PC building professionals
+- **Service Tracking**: Real-time updates on build progress
+- **Quality Assurance**: Professional assembly with warranty support
+- **Technical Support**: Ongoing assistance and maintenance
 
-### 💻 PC Builder Features
-- **Budget-Based Recommendations**: Get component suggestions based on your budget (LKR 200,000 - 1,000,000+)
-- **Usage-Specific Builds**: Optimized configurations for gaming, workstation, and multimedia use
-- **Component Categories**: 
-  - CPUs, GPUs, Motherboards, Memory (RAM)
-  - Storage, Power Supplies, PC Cases, CPU Coolers
-  - Monitors, Operating Systems
-- **Real-time Price Calculation**: Dynamic total pricing with budget validation
-- **Component Comparison**: Side-by-side comparison of similar components
+## 🏗️ Tech Stack
 
-### 🛍️ Marketplace Features
-- **Comprehensive Product Catalog**: Wide range of PC components and peripherals
-- **Advanced Filtering**: Filter by category, price range, and specifications
-- **Shopping Cart**: Add multiple items and manage quantities
-- **Secure Checkout**: Integrated payment processing
-- **Product Reviews**: Customer feedback and ratings system
+### Frontend
+- **React 18** - Modern UI framework
+- **React Router** - Client-side routing
+- **Bootstrap 5** - Responsive design framework
+- **React Bootstrap** - Component library
+- **Axios** - HTTP client
+- **Chart.js** - Data visualization
 
-### 🔧 Technician Services
-- **Professional Assignment**: Connect with verified PC building technicians
-- **Build Tracking**: Monitor progress from assignment to completion
-- **Communication System**: Direct messaging between customers and technicians
-- **Specialization Matching**: Find technicians based on specific expertise
+### Backend
+- **PHP 7.4+** - Server-side scripting
+- **MySQL 8.0+** - Relational database
+- **PHPMailer** - Email functionality
+- **Custom REST API** - Backend services
 
-## 🏗️ Technical Architecture
+### Development Tools
+- **Vite** - Build tool and development server
+- **Git** - Version control
+- **XAMPP** - Local development environment
 
-### Frontend (React.js)
-- **Framework**: React 18+ with Vite build tool
-- **UI Library**: React Bootstrap for responsive design
-- **Routing**: React Router for navigation
-- **State Management**: Context API for order management
-- **Icons**: React Bootstrap Icons
+## 📦 Installation
 
-### Backend (PHP)
-- **Language**: PHP 7.4+
-- **Architecture**: Object-oriented with MVC pattern
-- **Database**: MySQL 8.0+
-- **Email Service**: PHPMailer for notifications
-- **Session Management**: PHP sessions with CORS support
+### Prerequisites
+- [XAMPP](https://www.apachefriends.org/) (Apache, MySQL, PHP 7.4+)
+- [Node.js](https://nodejs.org/) (16.0 or higher)
+- [Git](https://git-scm.com/)
 
-### Database Structure
-- **Users Management**: Multi-role user system
-- **Product Catalog**: Detailed component specifications
-- **Order Processing**: Complete order lifecycle management
-- **Review System**: Customer feedback and ratings
-- **Notification System**: Real-time updates and alerts
-
-## 📋 Prerequisites
-
-Before installing GearSphere, ensure you have:
-
-- **XAMPP** (Apache, MySQL, PHP 7.4+)
-- **Node.js** (16.0 or higher)
-- **npm** or **yarn** package manager
-- **Git** for version control
-
-## ⚙️ Installation
-
-### 1. Clone the Repository
+### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/gearsphere.git
+git clone https://github.com/Makinthan2001/gearsphere.git
 cd gearsphere
 ```
 
-### 2. Backend Setup (PHP/MySQL)
+### 2. Backend Setup
+```bash
+# Copy backend files to XAMPP htdocs
+cp -r GearSphere-BackEnd/ /xampp/htdocs/gearsphere_api/
 
-#### Configure XAMPP
-1. Start Apache and MySQL services in XAMPP Control Panel
-2. Place the project in `C:\xampp\htdocs\gearsphere_api`
+# Start XAMPP services
+# - Apache
+# - MySQL
 
-#### Database Setup
-1. Open phpMyAdmin (http://localhost/phpmyadmin)
-2. Create a new database named `gearsphere`
-3. Import the database schema:
-   ```sql
-   -- Import the provided SQL file
-   SOURCE C:\xampp\htdocs\gearsphere_api\GearSphere-BackEnd\gearsphere.sql
-   ```
-
-#### Configure Database Connection
-Update database credentials in `GearSphere-BackEnd/DbConnector.php`:
-```php
-private $host = 'localhost';
-private $db_name = 'gearsphere';
-private $username = 'root';
-private $password = ''; // Your MySQL password
+# Import database
+# Open http://localhost/phpmyadmin
+# Create database 'gearsphere'
+# Import gearsphere.sql file
 ```
 
-### 3. Frontend Setup (React)
-
-Navigate to the frontend directory:
+### 3. Frontend Setup
 ```bash
 cd GearSphere-FrontEnd
-```
-
-Install dependencies:
-```bash
 npm install
-```
-
-Install additional required packages:
-```bash
-npm install react-bootstrap bootstrap react-bootstrap-icons
-npm install react-router-dom
-```
-
-### 4. Start the Application
-
-#### Start Backend (XAMPP)
-- Ensure Apache and MySQL are running in XAMPP
-
-#### Start Frontend Development Server
-```bash
-cd GearSphere-FrontEnd
 npm run dev
 ```
 
-The application will be available at:
+### 4. Configuration
+Update database connection in [`DbConnector.php`](GearSphere-BackEnd/DbConnector.php):
+```php
+$host = "localhost";
+$dbname = "gearsphere";
+$username = "root";
+$password = "";
+```
+
+## 🖥️ Usage
+
+### Access the Platform
 - **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost/gearsphere_api/GearSphere-BackEnd
+- **Backend API**: http://localhost/gearsphere_api/GearSphere-BackEnd/
+- **Database**: http://localhost/phpmyadmin
 
-## 🎮 Usage Guide
+### User Roles & Access
+- **Admin**: Full platform management and analytics
+- **Customer**: Browse, build PCs, and make purchases
+- **Seller**: Manage products and view sales data
+- **Technician**: Accept build requests and manage services
 
-### Getting Started
-1. **Register an Account**: Choose your role (Customer, Seller, or Technician)
-2. **Explore the Platform**: Browse components or start building your PC
-3. **Use PC Builder**: Select budget range and usage type for recommendations
-4. **Shop Components**: Add items to cart and proceed to checkout
-5. **Assign Technicians**: Get professional help for PC assembly
-
-### PC Builder Workflow
-1. **Select Usage Type**: Gaming, Workstation, or Multimedia
-2. **Choose Budget Range**: From budget-friendly to premium builds
-3. **Review Recommendations**: AI-suggested components based on your preferences
-4. **Customize Build**: Replace any component with alternatives
-5. **Proceed to Checkout**: Complete purchase or assign a technician
-
-### For Sellers
-1. **Add Products**: List your PC components with detailed specifications
-2. **Manage Inventory**: Update stock levels and pricing
-3. **Track Orders**: Monitor sales and customer orders
-4. **Analytics Dashboard**: View performance metrics and insights
-
-### For Technicians
-1. **Complete Profile**: Add specializations and experience details
-2. **Receive Assignments**: Get notified of new build requests
-3. **Update Progress**: Keep customers informed about build status
-4. **Build Portfolio**: Accumulate reviews and ratings
-
-## 📁 Project Structure
+## 📋 Project Structure
 
 ```
-gearsphere_api/
+gearsphere/
+├── GearSphere-BackEnd/              # PHP Backend
+│   ├── Main Classes/                # Core business logic
+│   │   ├── Admin.php               # Admin operations
+│   │   ├── Customer.php            # Customer management
+│   │   ├── Product.php             # Product operations
+│   │   ├── Technician.php          # Technician services
+│   │   └── Mailer.php              # Email services
+│   ├── API Endpoints/              # REST API endpoints
+│   ├── uploads/                    # File uploads
+│   ├── profile_images/             # User avatars
+│   └── gearsphere.sql              # Database schema
 │
-├── GearSphere-BackEnd/           # PHP Backend
-│   ├── Main Classes/             # Core PHP classes
-│   │   ├── Admin.php            # Admin management
-│   │   ├── Customer.php         # Customer operations
-│   │   ├── Product.php          # Product management
-│   │   ├── Technician.php       # Technician services
-│   │   ├── Seller.php           # Seller operations
-│   │   ├── Mailer.php           # Email services
-│   │   └── ...
-│   ├── API Endpoints/           # REST API endpoints
-│   │   ├── login.php
-│   │   ├── addProduct.php
-│   │   ├── suggestBuild.php
-│   │   └── ...
-│   ├── uploads/                 # File uploads
-│   ├── profile_images/          # User profile images
-│   └── gearsphere.sql          # Database schema
-│
-├── GearSphere-FrontEnd/         # React Frontend
+├── GearSphere-FrontEnd/             # React Frontend
 │   ├── src/
-│   │   ├── components/          # Reusable components
-│   │   ├── pages/              # Page components
-│   │   │   ├── customer/       # Customer pages
-│   │   │   ├── seller/         # Seller pages
-│   │   │   ├── technician/     # Technician pages
-│   │   │   └── admin/          # Admin pages
-│   │   ├── context/            # React Context
-│   │   └── utils/              # Utility functions
-│   ├── public/                 # Static assets
-│   ├── package.json           # Dependencies
-│   └── vite.config.js         # Vite configuration
+│   │   ├── components/             # Reusable components
+│   │   ├── pages/                  # Page components
+│   │   │   ├── customer/          # Customer interface
+│   │   │   ├── seller/            # Seller dashboard
+│   │   │   ├── technician/        # Technician panel
+│   │   │   └── admin/             # Admin console
+│   │   ├── context/               # React Context
+│   │   └── utils/                 # Utility functions
+│   ├── public/                    # Static assets
+│   └── package.json               # Dependencies
 │
-├── Documentation/              # Project documentation
-└── README.md                  # This file
+└── Documentation/                  # Project documentation
 ```
 
-## 🔧 API Endpoints
+## 🔌 API Endpoints
 
 ### Authentication
 - `POST /login.php` - User authentication
-- `POST /logout.php` - User logout
 - `POST /customersignup.php` - Customer registration
 - `POST /techniciansignup.php` - Technician registration
 
 ### PC Builder
-- `GET /suggestBuild.php` - Get component recommendations
+- `GET /suggestBuild.php` - Get AI recommendations
 - `GET /getCPUs.php` - Fetch CPU components
 - `GET /getGPUs.php` - Fetch GPU components
 - `GET /getMemory.php` - Fetch memory components
 
 ### Products & Orders
 - `GET /getProducts.php` - Fetch all products
-- `POST /addProduct.php` - Add new product (Seller)
-- `POST /createOrder.php` - Create new order
+- `POST /addProduct.php` - Add new product
+- `POST /createOrder.php` - Create order
 - `GET /getOrders.php` - Fetch user orders
 
-### Technician Services
-- `POST /assignTechnician.php` - Assign technician to build
-- `GET /getBuildRequests.php` - Get technician assignments
-- `POST /updateAssignmentStatus.php` - Update build status
+### Admin Operations
+- `GET /getAdmin.php` - Admin dashboard data
+- `POST /moderateReview.php` - Review moderation
+- `GET /getAllCustomers.php` - Customer management
 
-## 🔒 Security Features
+## 🛡️ Security Features
 
-- **Input Validation**: Comprehensive sanitization of user inputs
-- **SQL Injection Prevention**: Prepared statements for database queries
-- **CORS Configuration**: Proper cross-origin resource sharing setup
-- **Session Management**: Secure session handling and validation
-- **File Upload Security**: Restricted file types and validation
-- **Password Hashing**: Secure password storage
+- **Input Validation**: Comprehensive sanitization
+- **SQL Injection Prevention**: Prepared statements
+- **Password Hashing**: Secure bcrypt implementation
+- **Session Management**: Secure session handling
+- **File Upload Security**: Type validation and restrictions
+- **CORS Configuration**: Proper cross-origin setup
 
-## 🎨 Responsive Design
+## 🎨 UI/UX Features
 
-GearSphere features a fully responsive design that works seamlessly across:
-- **Desktop**: Full-featured experience with advanced controls
-- **Tablet**: Optimized layout for touch interaction
-- **Mobile**: Streamlined interface for mobile users
+- **Responsive Design**: Mobile-first approach
+- **Modern Interface**: Clean, intuitive design
+- **Dark/Light Themes**: User preference support
+- **Loading States**: Smooth user experience
+- **Toast Notifications**: Real-time feedback
+- **Interactive Charts**: Data visualization
 
-## 🛠️ Development
+## 🧪 Testing
 
-### Adding New Features
-1. **Backend**: Create new PHP classes in `Main Classes/` directory
-2. **Frontend**: Add components in appropriate `src/pages/` subdirectory
-3. **Database**: Update schema and create migration scripts
-4. **API**: Implement new endpoints following existing patterns
+```bash
+# Frontend tests
+cd GearSphere-FrontEnd
+npm test
 
-### Code Standards
-- **PHP**: Follow PSR-4 autoloading standards
-- **React**: Use functional components with hooks
-- **Database**: Use descriptive table and column names
-- **CSS**: Utilize Bootstrap classes for consistency
+# Backend API testing
+# Use Postman or similar tools to test endpoints
+```
 
 ## 🤝 Contributing
 
-We welcome contributions to GearSphere! Please follow these steps:
+We welcome contributions! Please follow these steps:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
+### Development Guidelines
+- Follow PSR-4 standards for PHP
+- Use functional components for React
+- Maintain consistent code formatting
+- Add comments for complex logic
+- Test thoroughly before submitting
+
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Support
+## 👨‍💻 Support & Contact
 
-For support and questions:
-- **Email**: mahinthan2001a@gmail.com
-- **Issues**: Create an issue on GitHub
-- **Documentation**: Check the `/Documentation` folder
+- **Email**: support@gearsphere.com
+- **GitHub Issues**: [Report a Bug](https://github.com/Makinthan2001/gearsphere/issues)
+- **Documentation**: Check `/Documentation` folder
+- **Response Time**: Within 24 hours
 
 ## 🙏 Acknowledgments
 
 - React community for excellent documentation
 - Bootstrap team for responsive components
 - PHP community for robust backend solutions
-- All contributors and testers
+- PHPMailer for reliable email services
+- Chart.js for beautiful data visualization
+- All contributors and beta testers
+
+## 🔮 Roadmap
+
+- [ ] Mobile app development
+- [ ] AI-powered price predictions
+- [ ] 3D PC build visualizer
+- [ ] Advanced inventory management
+- [ ] Multi-language support
+- [ ] Cryptocurrency payment integration
 
 ---
 
+<div align="center">
+
 **GearSphere** - Building PCs, Building Dreams 🚀💻
+
+Made with ❤️ by the GearSphere Team
+
+[Website](https://gearsphere.com) • [Documentation](./Documentation) • [Report Bug](https://github.com/Makinthan2001/gearsphere/issues) • [Feature Request](https://github.com/Makinthan2001/gearsphere/issues)
+
+</div>
